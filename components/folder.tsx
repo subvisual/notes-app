@@ -1,8 +1,8 @@
-import { FolderType, SimpleNoteType } from "..";
 import { useState, useEffect } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
 import { decryptData } from "../lib/crypto";
+import { FolderType, SimpleNoteType } from "..";
 
 type FolderProps = {
   folder: FolderType;

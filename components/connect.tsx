@@ -1,8 +1,8 @@
-import { ethers } from "ethers";
 import { useState, useEffect } from "react";
-import { getUser, createUser } from "../pages/api/db";
+import { ethers } from "ethers";
 import { v4 as uuidv4 } from "uuid";
 import { useStore } from "../lib/store";
+import { getUser, createUser } from "../pages/api/db";
 
 const Connect = () => {
   const [authState, setAuthState] = useState<string>("");

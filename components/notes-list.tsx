@@ -1,6 +1,6 @@
-import { SimpleNoteType } from "..";
 import { useStore } from "../lib/store";
 import { decryptData } from "../lib/crypto";
+import { SimpleNoteType } from "..";
 
 type NotesListProps = {
   notes: SimpleNoteType[];

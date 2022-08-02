@@ -1,8 +1,9 @@
-import { useStore } from "../lib/store";
 import { useState, useEffect, ChangeEvent } from "react";
-import { NoteType } from "..";
+import Tags from "./tags";
+import { useStore } from "../lib/store";
 import { getNoteById, updateNote, deleteNote } from "../pages/api/db";
 import { decryptData, encryptData } from "../lib/crypto";
+import { NoteType } from "..";
 
 const NoteEditor = () => {
   const {
@@ -13,11 +14,14 @@ const NoteEditor = () => {
     session: { openNote },
   } = useStore();
   const [currentNote, setCurrentNote] = useState<NoteType | null>(null);
-  const [readOnly, setReadOnly] = useState<boolean>(true);
+  const [editNote, setEditNote] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [updateName, setUpdateName] = useState<boolean>(false);
   const [updateContent, setUpdateContent] = useState<boolean>(false);
+  const [tags, setTags] = useState<string>("");
+  const [editTags, setEditTags] = useState<boolean>(false);
+  const [updateTags, setUpdateTags] = useState<boolean>(false);
 
   useEffect(() => {
     resetState();
@@ -32,15 +36,22 @@ const NoteEditor = () => {
         const decryptedContent = decryptData(res.body[0].content, signedKey);
         setContent(decryptedContent);
       }
+
+      if (res.body[0].tags) {
+        const decryptedTags = decryptData(res.body[0].tags, signedKey);
+        setTags(decryptedTags);
+      }
     });
   }, [openNote, signedKey]);
 
   const resetState = () => {
-    setReadOnly(true);
+    setEditNote(false);
     setContent("");
     setName("");
     setUpdateContent(false);
     setUpdateName(false);
+    setEditTags(false);
+    setTags("");
   };
 
   const handleSaveNote = async () => {
@@ -48,12 +59,14 @@ const NoteEditor = () => {
     const updatedNote = {
       ...(updateName && { name: encryptData(name, signedKey) }),
       ...(updateContent && { content: encryptData(content, signedKey) }),
+      ...(updateTags && { tags: encryptData(tags, signedKey) }),
     };
-    const { data } = await updateNote(updatedNote, currentNote?.id);
+    const { data } = await updateNote(updatedNote, currentNote.id);
     if (data?.length) {
       modifyNote(data[0], data[0].id);
       setUpdateName(false);
       setUpdateContent(false);
+      setUpdateTags(false);
     }
   };
 
@@ -67,26 +80,54 @@ const NoteEditor = () => {
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
-    setUpdateName(true);
+    if (!updateName) setUpdateName(true);
   };
+
   const handleContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
-    setUpdateContent(true);
+    if (!updateContent) setUpdateContent(true);
   };
-  const toggleMode = () => setReadOnly((prevReadOnly) => !prevReadOnly);
+
+  const handleChangeTags = (e: ChangeEvent<HTMLInputElement>) => {
+    setTags(e.target.value);
+    if (!updateTags) setUpdateTags(true);
+  };
+
+  const toggleEditNote = () => setEditNote((prevEditNote) => !prevEditNote);
+
+  const toggleEditTags = async () => {
+    if (!currentNote) return;
+    if (editTags && updateTags) {
+      const updatedNote = {
+        ...(updateTags && { tags: encryptData(tags, signedKey) }),
+      };
+      const { data } = await updateNote(updatedNote, currentNote.id);
+      if (data?.length) {
+        modifyNote(data[0], data[0].id);
+        setUpdateTags(false);
+      }
+    }
+    setEditTags((prevEditTags) => !prevEditTags);
+  };
 
   return (
     <>
       {currentNote && (
         <div className="flex flex-col w-4/5">
           <div className="bg-slate-300 flex justify-between">
-            <button onClick={handleDeleteNote}>delete</button>
+            <Tags
+              tags={tags}
+              editMode={editTags}
+              handleChangeTags={handleChangeTags}
+            />
+            <button onClick={toggleEditTags}>tags</button>
             <button
-              className={`${!readOnly && "bg-blue-400"} p-2`}
-              onClick={toggleMode}
+              className={`${editNote && "bg-blue-400"} p-2`}
+              onClick={toggleEditNote}
             >
               edit
             </button>
+            <button onClick={handleDeleteNote}>delete</button>
             <button className="p-2" onClick={handleSaveNote}>
               save
             </button>
@@ -95,13 +136,13 @@ const NoteEditor = () => {
             <input
               className="border"
               onChange={handleNameChange}
-              readOnly={readOnly}
+              readOnly={editNote}
               value={name}
             />
             <textarea
               className="border"
               onChange={handleContentChange}
-              readOnly={readOnly}
+              readOnly={editNote}
               value={content}
             />
           </div>

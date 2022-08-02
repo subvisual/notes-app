@@ -1,4 +1,9 @@
 import { useState, useEffect } from "react";
+import FoldersList from "./folders-list";
+import AddNoteModal from "./add-note-modal";
+import AddFolderModal from "./add-folder-modal";
+import DeleteFolderModal from "./delete-folder-modal";
+import { useStore } from "../lib/store";
 import {
   getFoldersBySig,
   createNote,
@@ -6,12 +11,7 @@ import {
   createFolder,
   deleteFolder,
 } from "../pages/api/db";
-import { useStore } from "../lib/store";
-import FoldersList from "./folders-list";
-import AddNoteModal from "./add-note-modal";
-import AddFolderModal from "./add-folder-modal";
 import { encryptData } from "../lib/crypto";
-import DeleteFolderModal from "./delete-folder-modal";
 
 const Menu = () => {
   const {

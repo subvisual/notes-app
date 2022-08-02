@@ -1,5 +1,5 @@
-import Modal from "react-modal";
 import { ChangeEvent, useState, FormEvent } from "react";
+import Modal from "react-modal";
 import { useStore } from "../lib/store";
 import { decryptData } from "../lib/crypto";
 
