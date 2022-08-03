@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useStore } from "../lib/store";
 import { getUser, createUser } from "../pages/api/db";
 
-const Connect = () => {
+export default function Connect() {
   const [authState, setAuthState] = useState<string>("");
   const [hasMetamask, setHasMetamask] = useState<boolean>();
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
@@ -17,8 +17,10 @@ const Connect = () => {
     if (!window.ethereum) {
       setAuthState("Please install MetaMask wallet");
       setHasMetamask(false);
+
       return;
     }
+
     setHasMetamask(true);
   }, []);
 
@@ -28,6 +30,7 @@ const Connect = () => {
       setAuthState("Connecting to your wallet...");
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
+
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
 
@@ -40,11 +43,12 @@ const Connect = () => {
       const user = await getUser(userSignature);
 
       let key = "";
+
       if (user?.data?.length) {
         key = user.data[0].key;
       } else {
         key = uuidv4();
-        let { data } = await createUser(userSignature, key);
+        await createUser(userSignature, key);
       }
 
       const signedUserKey = await signer.signMessage(key);
@@ -68,13 +72,11 @@ const Connect = () => {
   return (
     <div className="mx-auto">
       {hasMetamask && (
-        <button onClick={connect} disabled={isConnecting}>
+        <button type="button" onClick={connect} disabled={isConnecting}>
           Connect to MetaMask wallet
         </button>
       )}
       <p>{authState}</p>
     </div>
   );
-};
-
-export default Connect;
+}

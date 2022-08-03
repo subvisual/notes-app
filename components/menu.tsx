@@ -13,7 +13,7 @@ import {
 } from "../pages/api/db";
 import { encryptData } from "../lib/crypto";
 
-const Menu = () => {
+export default function Menu() {
   const {
     user: { userSig, signedKey },
     userNotes: { setAllNotes, addNote },
@@ -26,28 +26,33 @@ const Menu = () => {
     useState<boolean>(false);
   const [isAddNoteModalOpen, setIsAddNoteModalOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    getUserFolders();
-    getUserNotes();
-  }, []);
-
   const getUserFolders = async () => {
     const res = await getFoldersBySig(userSig);
+
     if (!res.body) return;
+
     setFolders(res.body);
   };
 
   const getUserNotes = async () => {
     const res = await getNotesBySig(userSig);
+
     if (!res.body) return;
+
     setAllNotes(res.body);
   };
+
+  useEffect(() => {
+    getUserFolders();
+    getUserNotes();
+  }, []);
 
   const handleCreateFolder = async (folderName: string) => {
     const { data } = await createFolder({
       name: encryptData(folderName, signedKey),
       user: userSig,
     });
+
     if (data?.length) {
       addFolder(data[0]);
     }
@@ -55,6 +60,7 @@ const Menu = () => {
 
   const handleDeleteFolder = async (folderId: string) => {
     const { data } = await deleteFolder(folderId);
+
     if (data?.length) {
       removeFolder(folderId);
     }
@@ -66,6 +72,7 @@ const Menu = () => {
       folder: folderId,
       user: userSig,
     });
+
     if (data?.length) {
       addNote(data[0]);
       setOpenNote({
@@ -86,13 +93,13 @@ const Menu = () => {
   return (
     <div className="bg-slate-300 h-full flex flex-col justify-between w-1/5">
       <FoldersList />
-      <button className="p-2" onClick={openAddFolderModal}>
+      <button type="button" className="p-2" onClick={openAddFolderModal}>
         ADD FOLDER
       </button>
-      <button className="p-2" onClick={openAddNoteModal}>
+      <button type="button" className="p-2" onClick={openAddNoteModal}>
         ADD NOTE
       </button>
-      <button className="p-2" onClick={openDeleteFolderModal}>
+      <button type="button" className="p-2" onClick={openDeleteFolderModal}>
         DELETE FOLDER
       </button>
       <AddFolderModal
@@ -100,21 +107,19 @@ const Menu = () => {
         closeModal={closeAddFolderModal}
         handleCreateFolder={handleCreateFolder}
         isOpen={isAddFolderModalOpen}
-      ></AddFolderModal>
+      />
       <AddNoteModal
         className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
         closeModal={closeAddNoteModal}
         handleCreateNote={handleCreateNote}
         isOpen={isAddNoteModalOpen}
-      ></AddNoteModal>
+      />
       <DeleteFolderModal
         className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
         closeModal={closeDeleteFolderModal}
         handleDeleteFolder={handleDeleteFolder}
         isOpen={isDeleteFolderModalOpen}
-      ></DeleteFolderModal>
+      />
     </div>
   );
-};
-
-export default Menu;
+}

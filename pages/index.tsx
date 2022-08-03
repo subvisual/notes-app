@@ -1,11 +1,10 @@
-import type { NextPage } from "next";
 import Head from "next/head";
 import Connect from "../components/connect";
 import { useStore } from "../lib/store";
 import Menu from "../components/menu";
 import NoteEditor from "../components/note-editor";
 
-const Home: NextPage = () => {
+export default function Home() {
   const {
     session: { isConnected },
   } = useStore();
@@ -30,6 +29,4 @@ const Home: NextPage = () => {
       </main>
     </div>
   );
-};
-
-export default Home;
+}

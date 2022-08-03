@@ -10,12 +10,12 @@ type DeleteFolderModalProps = {
   className: string;
 };
 
-const DeleteFolderModal = ({
+export default function DeleteFolderModal({
   closeModal,
   handleDeleteFolder,
   isOpen,
   className,
-}: DeleteFolderModalProps) => {
+}: DeleteFolderModalProps) {
   const {
     user: { signedKey },
     userFolders: { folders },
@@ -26,13 +26,15 @@ const DeleteFolderModal = ({
     setFolderId("");
   };
 
-  const handleFolderChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setFolderId(e.target.value);
+  const handleFolderChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+    setFolderId(ev.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+
     if (folderId) handleDeleteFolder(folderId);
+
     closeModal();
   };
 
@@ -49,14 +51,19 @@ const DeleteFolderModal = ({
         onSubmit={handleSubmit}
         className="flex flex-col text-center items-center"
       >
-        <label>
+        <label htmlFor="delete-folder-name">
           Folder:
-          <select required value={folderId} onChange={handleFolderChange}>
-            <option disabled={true} value="">
+          <select
+            id="delete-folder-name"
+            required
+            value={folderId}
+            onChange={handleFolderChange}
+          >
+            <option disabled value="">
               Choose a folder
             </option>
-            {Object.values(folders).map((folder, idx) => (
-              <option key={idx} value={folder.id}>
+            {Object.values(folders).map((folder) => (
+              <option key={folder.id} value={folder.id}>
                 {decryptData(folder.name, signedKey)}
               </option>
             ))}
@@ -73,6 +80,4 @@ const DeleteFolderModal = ({
       </form>
     </Modal>
   );
-};
-
-export default DeleteFolderModal;
+}

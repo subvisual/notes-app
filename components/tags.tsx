@@ -1,29 +1,28 @@
 import { ChangeEvent } from "react";
-import { splitTags } from "../lib/utils/split-tags";
+import splitTags from "../lib/utils/split-tags";
 
 type TagsProps = {
   tags: string;
   editMode: boolean;
-  handleChangeTags: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChangeTags: (ev: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Tags = ({ tags, editMode, handleChangeTags }: TagsProps) => {
+export default function Tags({ tags, editMode, handleChangeTags }: TagsProps) {
   const tagsArray = splitTags(tags);
+
   return (
-    <>
+    <div>
       {editMode ? (
         <input value={tags} onChange={handleChangeTags} />
       ) : (
         <ul className="flex">
-          {tagsArray.map((tag, idx) => (
-            <li key={idx} className="before:content-['#']">
+          {tagsArray.map((tag) => (
+            <li key={tag} className="before:content-['#']">
               {tag}
             </li>
           ))}
         </ul>
       )}
-    </>
+    </div>
   );
-};
-
-export default Tags;
+}

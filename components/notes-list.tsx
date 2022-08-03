@@ -6,7 +6,7 @@ type NotesListProps = {
   notes: SimpleNoteType[];
 };
 
-const NotesList = ({ notes }: NotesListProps) => {
+export default function NotesList({ notes }: NotesListProps) {
   const {
     user: { signedKey },
     session: { openNote, setOpenNote },
@@ -20,10 +20,11 @@ const NotesList = ({ notes }: NotesListProps) => {
 
   return (
     <div className="flex flex-col">
-      {notes.map((note, idx) => (
+      {notes.map((note) => (
         <button
+          type="button"
           className={note.id === openNote?.id ? "bg-blue-500" : ""}
-          key={idx}
+          key={note.id}
           onClick={() => handleClick(note)}
         >
           {decryptData(note.name, signedKey)}
@@ -31,6 +32,4 @@ const NotesList = ({ notes }: NotesListProps) => {
       ))}
     </div>
   );
-};
-
-export default NotesList;
+}

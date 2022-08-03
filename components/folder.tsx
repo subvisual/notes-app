@@ -8,7 +8,7 @@ type FolderProps = {
   folder: FolderType;
 };
 
-const Folder = ({ folder }: FolderProps) => {
+export default function Folder({ folder }: FolderProps) {
   const [notes, setNotes] = useState<SimpleNoteType[]>([]);
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const {
@@ -17,13 +17,13 @@ const Folder = ({ folder }: FolderProps) => {
     session: { openNote },
   } = useStore();
 
-  useEffect(() => {
-    setNotes(
-      Object.values(allNotes).filter((note) => {
-        return note.folder === folder.id;
-      }),
-    );
-  }, [allNotes, folder.id]);
+  useEffect(
+    () =>
+      setNotes(
+        Object.values(allNotes).filter((note) => note.folder === folder.id),
+      ),
+    [allNotes, folder.id],
+  );
 
   useEffect(() => {
     if (openNote?.folder === folder.id) {
@@ -35,10 +35,10 @@ const Folder = ({ folder }: FolderProps) => {
 
   return (
     <div className="folder-container">
-      <p onClick={toggleNotes}>{decryptData(folder.name, signedKey)}</p>
+      <button type="button" onClick={toggleNotes}>
+        {decryptData(folder.name, signedKey)}
+      </button>
       {showNotes && <NotesList notes={notes} />}
     </div>
   );
-};
-
-export default Folder;
+}

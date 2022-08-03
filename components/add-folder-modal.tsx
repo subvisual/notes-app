@@ -8,12 +8,12 @@ type AddFolderModalProps = {
   className: string;
 };
 
-const AddFolderModal = ({
+export default function AddFolderModal({
   closeModal,
   handleCreateFolder,
   isOpen,
   className,
-}: AddFolderModalProps) => {
+}: AddFolderModalProps) {
   const defaultName = "New Folder";
   const [folderName, setFolderName] = useState<string>(defaultName);
 
@@ -21,12 +21,12 @@ const AddFolderModal = ({
     setFolderName(defaultName);
   };
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFolderName(e.target.value);
+  const handleNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    setFolderName(ev.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
     handleCreateFolder(folderName);
     closeModal();
   };
@@ -44,9 +44,13 @@ const AddFolderModal = ({
         onSubmit={handleSubmit}
         className="flex flex-col text-center items-center"
       >
-        <label>
+        <label htmlFor="new-folder-name">
           Folder:
-          <input value={folderName} onChange={handleNameChange} />
+          <input
+            id="new-folder-name"
+            value={folderName}
+            onChange={handleNameChange}
+          />
         </label>
         <div className="flex justify-around">
           <button type="button" className="p-2" onClick={closeModal}>
@@ -59,6 +63,4 @@ const AddFolderModal = ({
       </form>
     </Modal>
   );
-};
-
-export default AddFolderModal;
+}

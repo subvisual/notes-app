@@ -10,12 +10,12 @@ type AddNoteModalProps = {
   className: string;
 };
 
-const AddNoteModal = ({
+export default function AddNoteModal({
   closeModal,
   handleCreateNote,
   isOpen,
   className,
-}: AddNoteModalProps) => {
+}: AddNoteModalProps) {
   const {
     user: { signedKey },
     userFolders: { folders },
@@ -29,16 +29,16 @@ const AddNoteModal = ({
     setFolderId("");
   };
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNoteName(e.target.value);
+  const handleNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    setNoteName(ev.target.value);
   };
 
-  const handleFolderChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setFolderId(e.target.value);
+  const handleFolderChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+    setFolderId(ev.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
     handleCreateNote(noteName, folderId);
     closeModal();
   };
@@ -56,18 +56,27 @@ const AddNoteModal = ({
         onSubmit={handleSubmit}
         className="flex flex-col text-center items-center"
       >
-        <label>
+        <label htmlFor="new-note-name">
           Name:
-          <input value={noteName} onChange={handleNameChange} />
+          <input
+            id="new-note-name"
+            value={noteName}
+            onChange={handleNameChange}
+          />
         </label>
-        <label>
+        <label htmlFor="new-note-folder">
           Folder:
-          <select required value={folderId} onChange={handleFolderChange}>
-            <option disabled={true} value="">
+          <select
+            id="new-note-folder"
+            required
+            value={folderId}
+            onChange={handleFolderChange}
+          >
+            <option disabled value="">
               Choose a folder
             </option>
-            {Object.values(folders).map((folder, idx) => (
-              <option key={idx} value={folder.id}>
+            {Object.values(folders).map((folder) => (
+              <option key={folder.id} value={folder.id}>
                 {decryptData(folder.name, signedKey)}
               </option>
             ))}
@@ -84,6 +93,4 @@ const AddNoteModal = ({
       </form>
     </Modal>
   );
-};
-
-export default AddNoteModal;
+}
