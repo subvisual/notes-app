@@ -16,6 +16,7 @@ type SimpleNoteType = {
   id: string;
   name: string;
   folder: string;
+  tags: string;
 };
 
 type NoteType = {

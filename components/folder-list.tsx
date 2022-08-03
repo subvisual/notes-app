@@ -1,13 +1,13 @@
 import Folder from "./folder";
 import { useStore } from "../lib/store";
 
-export default function FoldersList() {
+export default function FolderList() {
   const {
     userFolders: { folders },
   } = useStore();
 
   return (
-    <div className="grow">
+    <div>
       {Object.values(folders).map((folder) => (
         <Folder key={folder.id} folder={folder} />
       ))}

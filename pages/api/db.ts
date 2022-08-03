@@ -29,7 +29,10 @@ export async function createUser(signature: string, key: string) {
 }
 
 export async function getNotesBySig(sig: string) {
-  return supabase.from("notes").select(`id, name, folder`).eq("user", sig);
+  return supabase
+    .from("notes")
+    .select(`id, name, folder, tags`)
+    .eq("user", sig);
 }
 
 export async function getFoldersBySig(sig: string) {

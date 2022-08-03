@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import FoldersList from "./folders-list";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import FolderList from "./folder-list";
 import AddNoteModal from "./add-note-modal";
 import AddFolderModal from "./add-folder-modal";
 import DeleteFolderModal from "./delete-folder-modal";
@@ -11,13 +12,16 @@ import {
   createFolder,
   deleteFolder,
 } from "../pages/api/db";
-import { encryptData } from "../lib/crypto";
+import { encryptData, decryptData } from "../lib/crypto";
+import splitTags from "../lib/utils/split-tags";
+import TagList from "./tag-list";
 
 export default function Menu() {
   const {
     user: { userSig, signedKey },
-    userNotes: { setAllNotes, addNote },
+    userNotes: { setAllNotes, addNote, allNotes },
     userFolders: { setFolders, addFolder, removeFolder },
+    userTags: { setTags },
     session: { setOpenNote },
   } = useStore();
   const [isAddFolderModalOpen, setIsAddFolderModalOpen] =
@@ -42,10 +46,29 @@ export default function Menu() {
     setAllNotes(res.body);
   };
 
+  const getUserTags = () => {
+    const tags = Object.values(allNotes).reduce((previousTags, currentNote) => {
+      if (!currentNote.tags) return [...previousTags];
+
+      return [
+        ...previousTags,
+        ...splitTags(decryptData(currentNote.tags, signedKey)).filter(
+          (tag) => !previousTags.includes(tag),
+        ),
+      ];
+    }, [] as string[]);
+
+    setTags(tags);
+  };
+
   useEffect(() => {
     getUserFolders();
     getUserNotes();
   }, []);
+
+  useEffect(() => {
+    getUserTags();
+  }, [allNotes]);
 
   const handleCreateFolder = async (folderName: string) => {
     const { data } = await createFolder({
@@ -71,6 +94,7 @@ export default function Menu() {
       name: encryptData(noteName, signedKey),
       folder: folderId,
       user: userSig,
+      tags: "",
     });
 
     if (data?.length) {
@@ -79,6 +103,7 @@ export default function Menu() {
         id: data[0].id,
         name: data[0].name,
         folder: data[0].folder,
+        tags: data[0].tags,
       });
     }
   };
@@ -92,7 +117,19 @@ export default function Menu() {
 
   return (
     <div className="bg-slate-300 h-full flex flex-col justify-between w-1/5">
-      <FoldersList />
+      <Tabs className="grow">
+        <TabList className="flex">
+          <Tab>Folders</Tab>
+          <Tab>Tags</Tab>
+        </TabList>
+
+        <TabPanel className="p-0">
+          <FolderList />
+        </TabPanel>
+        <TabPanel className="p-0">
+          <TagList />
+        </TabPanel>
+      </Tabs>
       <button type="button" className="p-2" onClick={openAddFolderModal}>
         ADD FOLDER
       </button>

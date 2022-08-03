@@ -26,6 +26,10 @@ type UseStore = {
     addFolder: (folder: FolderType) => void;
     removeFolder: (folderId: string) => void;
   };
+  userTags: {
+    tags: string[];
+    setTags: (tags: string[]) => void;
+  };
   session: {
     isConnected: boolean;
     setIsConnected: (bool: boolean) => void;
@@ -107,6 +111,14 @@ export const useStore = create<UseStore>()((set) => ({
             (folder) => folder.id !== folderId,
           ),
         },
+      })),
+  },
+  userTags: {
+    tags: [],
+    setTags: (tags: string[]) =>
+      set((state) => ({
+        ...state,
+        userTags: { ...state.userTags, tags },
       })),
   },
   session: {

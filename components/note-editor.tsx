@@ -1,5 +1,5 @@
-import { useState, useEffect, ChangeEvent } from "react";
-import Tags from "./tags";
+import { useState, useEffect, ChangeEvent, useRef } from "react";
+import NoteTags from "./note-tags";
 import { useStore } from "../lib/store";
 import { getNoteById, updateNote, deleteNote } from "../pages/api/db";
 import { decryptData, encryptData } from "../lib/crypto";
@@ -15,22 +15,22 @@ export default function NoteEditor() {
   } = useStore();
   const [currentNote, setCurrentNote] = useState<NoteType | null>(null);
   const [editNote, setEditNote] = useState<boolean>(false);
-  const [content, setContent] = useState<string>("");
+  const [editTags, setEditTags] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [tags, setTags] = useState<string>("");
   const [updateName, setUpdateName] = useState<boolean>(false);
   const [updateContent, setUpdateContent] = useState<boolean>(false);
-  const [tags, setTags] = useState<string>("");
-  const [editTags, setEditTags] = useState<boolean>(false);
   const [updateTags, setUpdateTags] = useState<boolean>(false);
 
   const resetState = () => {
     setEditNote(false);
-    setContent("");
-    setName("");
-    setUpdateContent(false);
-    setUpdateName(false);
     setEditTags(false);
+    setName("");
+    setContent("");
     setTags("");
+    setUpdateName(false);
+    setUpdateContent(false);
   };
 
   useEffect(() => {
@@ -63,7 +63,9 @@ export default function NoteEditor() {
 
     const updatedNote = {
       ...(updateName && { name: encryptData(name, signedKey) }),
-      ...(updateContent && { content: encryptData(content, signedKey) }),
+      ...(updateContent && {
+        content: encryptData(content, signedKey),
+      }),
       ...(updateTags && { tags: encryptData(tags, signedKey) }),
     };
     const { data } = await updateNote(updatedNote, currentNote.id);
@@ -126,11 +128,11 @@ export default function NoteEditor() {
   };
 
   return (
-    <div>
+    <div className="w-4/5">
       {currentNote && (
-        <div className="flex flex-col w-4/5">
+        <div className="flex flex-col">
           <div className="bg-slate-300 flex justify-between">
-            <Tags
+            <NoteTags
               tags={tags}
               editMode={editTags}
               handleChangeTags={handleChangeTags}
@@ -156,13 +158,13 @@ export default function NoteEditor() {
             <input
               className="border"
               onChange={handleNameChange}
-              readOnly={editNote}
+              readOnly={!editNote}
               value={name}
             />
             <textarea
               className="border"
               onChange={handleContentChange}
-              readOnly={editNote}
+              readOnly={!editNote}
               value={content}
             />
           </div>
