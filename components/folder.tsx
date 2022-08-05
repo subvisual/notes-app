@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
-import { decryptData } from "../lib/crypto";
 import { FolderType, SimpleNoteType } from "..";
 
 type FolderProps = {
@@ -12,7 +11,6 @@ export default function Folder({ folder }: FolderProps) {
   const [notes, setNotes] = useState<SimpleNoteType[]>([]);
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const {
-    user: { signedKey },
     userNotes: { allNotes },
     session: { openNote },
   } = useStore();
@@ -36,7 +34,7 @@ export default function Folder({ folder }: FolderProps) {
   return (
     <div className="folder-container">
       <button type="button" onClick={toggleNotes}>
-        {decryptData(folder.name, signedKey)}
+        {folder.name}
       </button>
       {showNotes && <NotesList notes={notes} />}
     </div>

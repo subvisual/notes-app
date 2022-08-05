@@ -1,5 +1,5 @@
 import create from "zustand";
-import { SimpleNoteType, FolderType, NoteType } from "..";
+import { SimpleNoteType, FolderType } from "..";
 
 export enum Theme {
   Light = "light",
@@ -18,7 +18,7 @@ type UseStore = {
     setAllNotes: (notes: SimpleNoteType[]) => void;
     addNote: (note: SimpleNoteType) => void;
     removeNote: (noteId: string) => void;
-    modifyNote: (modNote: NoteType, id: string) => void;
+    modifyNote: (params: Record<string, string>, id: string) => void;
   };
   userFolders: {
     folders: FolderType[];
@@ -76,13 +76,13 @@ export const useStore = create<UseStore>()((set) => ({
           ),
         },
       })),
-    modifyNote: (modNote: NoteType, id: string) =>
+    modifyNote: (params: Record<string, string>, id: string) =>
       set((state) => ({
         ...state,
         userNotes: {
           ...state.userNotes,
           allNotes: state.userNotes.allNotes.map((note) =>
-            note.id === id ? { ...modNote } : note,
+            note.id === id ? { ...note, ...params } : note,
           ),
         },
       })),

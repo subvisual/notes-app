@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
-import { decryptData } from "../lib/crypto";
 import splitTags from "../lib/utils/split-tags";
 import { SimpleNoteType } from "..";
 
@@ -13,7 +12,6 @@ export default function Tag({ tag }: TagProps) {
   const [notes, setNotes] = useState<SimpleNoteType[]>([]);
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const {
-    user: { signedKey },
     userNotes: { allNotes },
   } = useStore();
 
@@ -21,13 +19,13 @@ export default function Tag({ tag }: TagProps) {
     const tagNotes = Object.values(allNotes).filter((note) => {
       if (!note.tags) return false;
 
-      const noteTags = splitTags(decryptData(note.tags, signedKey));
+      const noteTags = splitTags(note.tags);
 
       return noteTags.some(() => noteTags.includes(tag));
     });
 
     setNotes(tagNotes);
-  }, [allNotes, tag, signedKey]);
+  }, [allNotes, tag]);
 
   const toggleNotes = () => setShowNotes(!showNotes);
 

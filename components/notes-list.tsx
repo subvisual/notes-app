@@ -1,5 +1,4 @@
 import { useStore } from "../lib/store";
-import { decryptData } from "../lib/crypto";
 import { SimpleNoteType } from "..";
 
 type NotesListProps = {
@@ -8,7 +7,6 @@ type NotesListProps = {
 
 export default function NotesList({ notes }: NotesListProps) {
   const {
-    user: { signedKey },
     session: { openNote, setOpenNote },
   } = useStore();
 
@@ -27,7 +25,7 @@ export default function NotesList({ notes }: NotesListProps) {
           key={note.id}
           onClick={() => handleClick(note)}
         >
-          {decryptData(note.name, signedKey)}
+          {note.name}
         </button>
       ))}
     </div>

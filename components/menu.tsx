@@ -35,7 +35,12 @@ export default function Menu() {
 
     if (!res.body) return;
 
-    setFolders(res.body);
+    const folders = res.body.map((folder) => ({
+      ...folder,
+      name: decryptData(folder.name, signedKey),
+    }));
+
+    setFolders(folders);
   };
 
   const getUserNotes = async () => {
@@ -43,7 +48,13 @@ export default function Menu() {
 
     if (!res.body) return;
 
-    setAllNotes(res.body);
+    const notes = res.body.map((note) => ({
+      ...note,
+      ...(note.name && { name: decryptData(note.name, signedKey) }),
+      ...(note.tags && { tags: decryptData(note.tags, signedKey) }),
+    }));
+
+    setAllNotes(notes);
   };
 
   const getUserTags = () => {
@@ -52,7 +63,7 @@ export default function Menu() {
 
       return [
         ...previousTags,
-        ...splitTags(decryptData(currentNote.tags, signedKey)).filter(
+        ...splitTags(currentNote.tags).filter(
           (tag) => !previousTags.includes(tag),
         ),
       ];

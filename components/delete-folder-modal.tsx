@@ -1,7 +1,6 @@
 import Modal from "react-modal";
 import { ChangeEvent, useState, FormEvent } from "react";
 import { useStore } from "../lib/store";
-import { decryptData } from "../lib/crypto";
 
 type DeleteFolderModalProps = {
   closeModal: () => void;
@@ -17,7 +16,6 @@ export default function DeleteFolderModal({
   className,
 }: DeleteFolderModalProps) {
   const {
-    user: { signedKey },
     userFolders: { folders },
   } = useStore();
   const [folderId, setFolderId] = useState<string>("");
@@ -64,7 +62,7 @@ export default function DeleteFolderModal({
             </option>
             {Object.values(folders).map((folder) => (
               <option key={folder.id} value={folder.id}>
-                {decryptData(folder.name, signedKey)}
+                {folder.name}
               </option>
             ))}
           </select>

@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import NoteTags from "./note-tags";
 import { useStore } from "../lib/store";
 import { getNoteById, updateNote, deleteNote } from "../pages/api/db";
@@ -42,36 +42,39 @@ export default function NoteEditor() {
       if (!res.body?.length) return;
 
       setCurrentNote(res.body[0]);
-      setName(decryptData(res.body[0].name, signedKey));
+      setName(openNote.name);
 
       if (res.body[0].content) {
-        const decryptedContent = decryptData(res.body[0].content, signedKey);
-
-        setContent(decryptedContent);
+        setContent(decryptData(res.body[0].content, signedKey));
       }
 
-      if (res.body[0].tags) {
-        const decryptedTags = decryptData(res.body[0].tags, signedKey);
-
-        setTags(decryptedTags);
-      }
+      if (res.body[0].tags) setTags(openNote.tags);
     });
   }, [openNote, signedKey]);
 
   const handleSaveNote = async () => {
     if (!currentNote) return;
 
-    const updatedNote = {
-      ...(updateName && { name: encryptData(name, signedKey) }),
-      ...(updateContent && {
-        content: encryptData(content, signedKey),
-      }),
-      ...(updateTags && { tags: encryptData(tags, signedKey) }),
-    };
-    const { data } = await updateNote(updatedNote, currentNote.id);
+    const { data } = await updateNote(
+      {
+        ...(updateName && { name: encryptData(name, signedKey) }),
+        ...(updateContent && {
+          content: encryptData(content, signedKey),
+        }),
+        ...(updateTags && { tags: encryptData(tags, signedKey) }),
+      },
+      currentNote.id,
+    );
 
     if (data?.length) {
-      modifyNote(data[0], data[0].id);
+      modifyNote(
+        {
+          ...(updateName && { name }),
+          ...(updateContent && { content }),
+          ...(updateTags && { tags }),
+        },
+        data[0].id,
+      );
       setUpdateName(false);
       setUpdateContent(false);
       setUpdateTags(false);
@@ -119,7 +122,7 @@ export default function NoteEditor() {
       const { data } = await updateNote(updatedNote, currentNote.id);
 
       if (data?.length) {
-        modifyNote(data[0], data[0].id);
+        modifyNote({ tags }, data[0].id);
         setUpdateTags(false);
       }
     }

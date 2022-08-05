@@ -1,7 +1,6 @@
 import { ChangeEvent, useState, FormEvent } from "react";
 import Modal from "react-modal";
 import { useStore } from "../lib/store";
-import { decryptData } from "../lib/crypto";
 
 type AddNoteModalProps = {
   closeModal: () => void;
@@ -17,7 +16,6 @@ export default function AddNoteModal({
   className,
 }: AddNoteModalProps) {
   const {
-    user: { signedKey },
     userFolders: { folders },
   } = useStore();
   const defaultName = "New Note";
@@ -77,7 +75,7 @@ export default function AddNoteModal({
             </option>
             {Object.values(folders).map((folder) => (
               <option key={folder.id} value={folder.id}>
-                {decryptData(folder.name, signedKey)}
+                {folder.name}
               </option>
             ))}
           </select>
