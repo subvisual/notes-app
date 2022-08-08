@@ -9,7 +9,6 @@ declare global {
 type FolderType = {
   id: string;
   name: string;
-  user: string;
 };
 
 type SimpleNoteType = {
@@ -22,7 +21,6 @@ type SimpleNoteType = {
 type NoteType = {
   id: string;
   name: string;
-  user: string;
   content: string;
   slug: string;
   tags: string;

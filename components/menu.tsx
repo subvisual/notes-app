@@ -109,13 +109,15 @@ export default function Menu() {
     });
 
     if (data?.length) {
-      addNote(data[0]);
-      setOpenNote({
+      const newNote = {
         id: data[0].id,
-        name: data[0].name,
-        folder: data[0].folder,
-        tags: data[0].tags,
-      });
+        name: noteName,
+        folder: folderId,
+        tags: "",
+      };
+
+      addNote(newNote);
+      setOpenNote(newNote);
     }
   };
 
