@@ -88,7 +88,10 @@ export default function Menu() {
     });
 
     if (data?.length) {
-      addFolder(data[0]);
+      addFolder({
+        id: data[0].id,
+        name: folderName,
+      });
     }
   };
 
