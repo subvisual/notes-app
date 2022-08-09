@@ -6,6 +6,7 @@ export default function Connect() {
   const [authState, setAuthState] = useState<string>('');
   const [hasMetamask, setHasMetamask] = useState<boolean>();
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
     if (!window.ethereum) {
@@ -19,10 +20,10 @@ export default function Connect() {
   }, []);
 
   const connect = async () => {
+    if (!window.ethereum) return;
     try {
       setIsConnecting(true);
       setAuthState('Connecting to your wallet...');
-
       const provider = new ethers.providers.Web3Provider(window.ethereum);
 
       await provider.send('eth_requestAccounts', []);
@@ -46,16 +47,21 @@ export default function Connect() {
 
       setIsConnecting(false);
       setAuthState('Connected');
-    } catch (err) {
-      setAuthState('An error occurred. Please try again.');
-      console.log(err);
+      setIsConnected(true);
+    } catch (err: any) {
+      if (err.code === 4001) {
+        setAuthState('');
+      } else {
+        setAuthState('An error occurred. Please try again.');
+      }
+
       setIsConnecting(false);
     }
   };
 
   return (
     <div>
-      {hasMetamask && (
+      {hasMetamask && !isConnected && (
         <button type='button' onClick={connect} disabled={isConnecting}>
           Connect to MetaMask wallet
         </button>
