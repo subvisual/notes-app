@@ -4,7 +4,7 @@ export async function createNote(params: Record<string, string>) {
   return supabase.from('notes').insert([params]);
 }
 
-export async function updateNote(params: Record<string, string>, id: string) {
+export async function updateNote(id: string, params: Record<string, string>) {
   return supabase.from('notes').update([params]).match({ id });
 }
 
@@ -20,6 +20,10 @@ export async function deleteFolder(id: string) {
   return supabase.from('folders').delete().match({ id });
 }
 
+export async function updateFolder(id: string, name: string) {
+  return supabase.from('folders').update({ name }).match({ id });
+}
+
 export async function getUser(sig: string) {
   return supabase.from('users').select('*').eq('signature', sig);
 }
@@ -29,13 +33,9 @@ export async function createUser(signature: string, key: string) {
 }
 
 export async function getNotesBySig(sig: string) {
-  return supabase.from('notes').select(`id, name, folder, tags`).eq('user', sig);
+  return supabase.from('notes').select(`id, name, folder, tags, content, slug`).eq('user', sig);
 }
 
 export async function getFoldersBySig(sig: string) {
   return supabase.from('folders').select(`id, name`).eq('user', sig);
-}
-
-export async function getNoteById(id: string) {
-  return supabase.from('notes').select('*').eq('id', id);
 }
