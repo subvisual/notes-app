@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'redaxios';
+import { useStore } from '../lib/store';
 
 export default function Connect() {
   const [authState, setAuthState] = useState<string>('');
   const [hasMetamask, setHasMetamask] = useState<boolean>();
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const {
+    user: { setUserSig, setSignedKey },
+    session: { isConnected, setIsConnected },
+  } = useStore();
 
   useEffect(() => {
     if (!window.ethereum) {
       setAuthState('Please install MetaMask wallet');
       setHasMetamask(false);
-
       return;
     }
 
@@ -35,16 +39,31 @@ export default function Connect() {
         `Hi, please sign this message: ${process.env.NEXT_PUBLIC_RANDOM_STRING}`
       );
 
-      // TODO: Get user from DB, if found: get user key, if not found: create new user and generate new key
+      let key = '';
 
-      let key = uuidv4();
-
-      const signedUserKey = await signer.signMessage(key);
-
-      if (!signedUserKey || !userSignature) {
-        throw new Error();
+      try {
+        const res = await axios.get(`http://localhost:3000/api/users?userSig=${userSignature}`);
+        key = res?.data.userData.key;
+      } catch (err: any) {
+        if (err.data.message === 'User not found') {
+          key = uuidv4();
+          await axios.post('http://localhost:3000/api/users', {
+            userSig: userSignature,
+            key,
+          });
+        } else {
+          throw err;
+        }
       }
 
+      const signedKey = await signer.signMessage(key);
+
+      if (!signedKey || !userSignature) {
+        throw new Error('Missing user information');
+      }
+
+      setUserSig(userSignature);
+      setSignedKey(signedKey);
       setIsConnecting(false);
       setAuthState('Connected');
       setIsConnected(true);
