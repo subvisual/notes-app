@@ -18,14 +18,14 @@ type UseStore = {
   };
   userNotes: {
     allNotes: NoteType[];
-    setAllNotes: (userSignature: string) => void;
+    getAllNotes: (userSignature: string) => void;
     addNote: (params: { name: string; slug: string; folder: string; user: string }) => void;
     removeNote: (id: string) => void;
     updateNote: (id: string, params: Record<string, string>) => void;
   };
   userFolders: {
     folders: FolderType[];
-    setFolders: (userSignature: string) => void;
+    getFolders: (userSignature: string) => void;
     addFolder: (params: { name: string; user: string }) => void;
     removeFolder: (id: string) => void;
     updateFolder: (id: string, name: string) => void;
@@ -56,7 +56,7 @@ export const useStore = create<UseStore>()(set => ({
   },
   userNotes: {
     allNotes: [],
-    setAllNotes: async (userSignature: string) => {
+    getAllNotes: async (userSignature: string) => {
       const res = await axios.get(`http://localhost:3000/api/notes?userSig=${userSignature}`);
 
       if (res.status !== 200) return;
@@ -110,7 +110,7 @@ export const useStore = create<UseStore>()(set => ({
   },
   userFolders: {
     folders: [],
-    setFolders: async (userSignature: string) => {
+    getFolders: async (userSignature: string) => {
       const res = await axios.get(`http://localhost:3000/api/folders?userSig=${userSignature}`);
 
       if (res.status !== 200) return;
