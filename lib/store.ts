@@ -1,5 +1,5 @@
 import create from 'zustand';
-import axios from 'redaxios';
+import axios from './axios';
 
 import { NoteType, FolderType } from '..';
 import splitTags from './utils/split-tags';
@@ -57,7 +57,7 @@ export const useStore = create<UseStore>()(set => ({
   userNotes: {
     allNotes: [],
     getAllNotes: async (userSignature: string) => {
-      const res = await axios.get(`http://localhost:3000/api/notes?userSig=${userSignature}`);
+      const res = await axios.get(`notes?userSig=${userSignature}`);
 
       if (res.status !== 200) return;
 
@@ -67,7 +67,7 @@ export const useStore = create<UseStore>()(set => ({
       }));
     },
     addNote: async (params: { name: string; slug: string; folder: string; user: string }) => {
-      const res = await axios.post('http://localhost:3000/api/notes', params);
+      const res = await axios.post('notes', params);
 
       if (res.status !== 200) return;
 
@@ -80,7 +80,7 @@ export const useStore = create<UseStore>()(set => ({
       }));
     },
     removeNote: async (id: string) => {
-      const res = await axios.delete(`http://localhost:3000/api/notes?id=${id}`);
+      const res = await axios.delete(`notes?id=${id}`);
 
       if (res.status !== 200) return;
 
@@ -93,7 +93,7 @@ export const useStore = create<UseStore>()(set => ({
       }));
     },
     updateNote: async (id: string, params: Record<string, string>) => {
-      const res = await axios.put(`http://localhost:3000/api/notes?id=${id}`, params);
+      const res = await axios.put(`notes?id=${id}`, params);
 
       if (res.status !== 200) return;
 
@@ -111,7 +111,7 @@ export const useStore = create<UseStore>()(set => ({
   userFolders: {
     folders: [],
     getFolders: async (userSignature: string) => {
-      const res = await axios.get(`http://localhost:3000/api/folders?userSig=${userSignature}`);
+      const res = await axios.get(`folders?userSig=${userSignature}`);
 
       if (res.status !== 200) return;
 
@@ -121,7 +121,7 @@ export const useStore = create<UseStore>()(set => ({
       }));
     },
     addFolder: async (params: { name: string; user: string }) => {
-      const res = await axios.post('http://localhost:3000/api/folders', params);
+      const res = await axios.post('folders', params);
 
       if (res.status !== 200) return;
 
@@ -134,7 +134,7 @@ export const useStore = create<UseStore>()(set => ({
       }));
     },
     removeFolder: async (id: string) => {
-      const res = await axios.delete(`http://localhost:3000/api/folders?id=${id}`);
+      const res = await axios.delete(`folders?id=${id}`);
 
       if (res.status !== 200) return;
 
@@ -147,7 +147,7 @@ export const useStore = create<UseStore>()(set => ({
       }));
     },
     updateFolder: async (id: string, name: string) => {
-      const res = await axios.put(`http://localhost:3000/api/folders?id=${id}`, { name });
+      const res = await axios.put(`folders?id=${id}`, { name });
 
       if (res.status !== 200) return;
 
