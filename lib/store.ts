@@ -1,12 +1,11 @@
-import create from 'zustand';
-import axios from './axios';
-
-import { NoteType, FolderType } from '..';
-import splitTags from './utils/split-tags';
+import create from "zustand";
+import axios from "./axios";
+import { NoteType, FolderType } from "..";
+import splitTags from "./utils/split-tags";
 
 export enum Theme {
-  Light = 'light',
-  Dark = 'dark',
+  Light = "light",
+  Dark = "dark",
 }
 
 type UseStore = {
@@ -19,7 +18,12 @@ type UseStore = {
   userNotes: {
     allNotes: NoteType[];
     getAllNotes: (userSignature: string) => void;
-    addNote: (params: { name: string; slug: string; folder: string; user: string }) => void;
+    addNote: (params: {
+      name: string;
+      slug: string;
+      folder: string;
+      user: string;
+    }) => Promise<NoteType | null>;
     removeNote: (id: string) => void;
     updateNote: (id: string, params: Record<string, string>) => void;
   };
@@ -38,7 +42,7 @@ type UseStore = {
     isConnected: boolean;
     setIsConnected: (bool: boolean) => void;
     openNote: NoteType | null;
-    setOpenNote: (note: NoteType) => void;
+    setOpenNote: (note: NoteType | null) => void;
   };
   preferences: {
     theme: Theme;
@@ -48,8 +52,8 @@ type UseStore = {
 
 export const useStore = create<UseStore>()(set => ({
   user: {
-    userSig: '',
-    signedKey: '',
+    userSig: "",
+    signedKey: "",
     setUserSig: (userSig: string) => set(state => ({ ...state, user: { ...state.user, userSig } })),
     setSignedKey: (signedKey: string) =>
       set(state => ({ ...state, user: { ...state.user, signedKey } })),
@@ -66,10 +70,15 @@ export const useStore = create<UseStore>()(set => ({
         userNotes: { ...state.userNotes, allNotes: res.data.notes },
       }));
     },
-    addNote: async (params: { name: string; slug: string; folder: string; user: string }) => {
-      const res = await axios.post('notes', params);
+    addNote: async (params: {
+      name: string;
+      slug: string;
+      folder: string;
+      user: string;
+    }): Promise<NoteType | null> => {
+      const res = await axios.post("notes", params);
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) return null;
 
       set(state => ({
         ...state,
@@ -78,6 +87,8 @@ export const useStore = create<UseStore>()(set => ({
           allNotes: [...state.userNotes.allNotes, res.data.note],
         },
       }));
+
+      return res.data.note;
     },
     removeNote: async (id: string) => {
       const res = await axios.delete(`notes?id=${id}`);
@@ -121,7 +132,7 @@ export const useStore = create<UseStore>()(set => ({
       }));
     },
     addFolder: async (params: { name: string; user: string }) => {
-      const res = await axios.post('folders', params);
+      const res = await axios.post("folders", params);
 
       if (res.status !== 200) return;
 
@@ -188,7 +199,7 @@ export const useStore = create<UseStore>()(set => ({
         session: { ...state.session, isConnected: bool },
       })),
     openNote: null,
-    setOpenNote: (note: NoteType) =>
+    setOpenNote: (note: NoteType | null) =>
       set(state => ({
         ...state,
         session: { ...state.session, openNote: note },
