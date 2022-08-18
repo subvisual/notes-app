@@ -1,24 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
-import { FolderType, NoteType } from "..";
+import { FolderType } from "..";
 
 type FolderProps = {
   folder: FolderType;
 };
 
 export default function Folder({ folder }: FolderProps) {
-  const [notes, setNotes] = useState<NoteType[]>([]);
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const {
     userNotes: { allNotes },
     session: { openNote },
   } = useStore();
 
-  useEffect(
-    () => setNotes(Object.values(allNotes).filter(note => note.folder === folder.id)),
-    [allNotes, folder.id]
-  );
+  const notes = useMemo(() => {
+    return allNotes.filter(note => note.folder === folder.id);
+  }, [allNotes, folder.id]);
 
   useEffect(() => {
     if (openNote?.folder === folder.id) {

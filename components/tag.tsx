@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
 import splitTags from "../lib/utils/split-tags";
@@ -9,23 +9,23 @@ type TagProps = {
 };
 
 export default function Tag({ tag }: TagProps) {
-  const [notes, setNotes] = useState<NoteType[]>([]);
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const {
     userNotes: { allNotes },
   } = useStore();
 
-  useEffect(() => {
-    const tagNotes = Object.values(allNotes).filter(note => {
-      if (!note.tags) return false;
+  const notes = useMemo(
+    () =>
+      allNotes.filter(note => {
+        if (!note.tags) return false;
 
-      const noteTags = splitTags(note.tags);
+        const noteTags = splitTags(note.tags);
 
-      return noteTags.some(() => noteTags.includes(tag));
-    });
+        return noteTags.some(() => noteTags.includes(tag));
+      }),
 
-    setNotes(tagNotes);
-  }, [allNotes, tag]);
+    [allNotes, tag]
+  );
 
   const toggleNotes = () => setShowNotes(!showNotes);
 

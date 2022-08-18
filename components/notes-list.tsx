@@ -11,8 +11,6 @@ export default function NotesList({ notes }: NotesListProps) {
     session: { openNote, setOpenNote },
   } = useStore();
 
-  useEffect(() => {}, [openNote]);
-
   const handleClick = (note: NoteType) => {
     if (openNote?.id !== note.id) {
       setOpenNote(note);
