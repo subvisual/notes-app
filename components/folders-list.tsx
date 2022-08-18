@@ -8,7 +8,7 @@ export default function FoldersList() {
 
   return (
     <div>
-      {Object.values(folders).map(folder => (
+      {folders.map(folder => (
         <Folder key={folder.id} folder={folder} />
       ))}
     </div>

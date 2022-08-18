@@ -177,7 +177,7 @@ export const useStore = create<UseStore>()(set => ({
     tags: [],
     setTags: () =>
       set(state => {
-        const tags = Object.values(state.userNotes.allNotes).reduce((previousTags, currentNote) => {
+        const tags = state.userNotes.allNotes.reduce((previousTags, currentNote) => {
           if (!currentNote.tags) return [...previousTags];
 
           return [

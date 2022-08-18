@@ -61,7 +61,7 @@ export default function AddNoteModal({
             <option disabled value="">
               Choose a folder
             </option>
-            {Object.values(folders).map(folder => (
+            {folders.map(folder => (
               <option key={folder.id} value={folder.id}>
                 {folder.name}
               </option>
