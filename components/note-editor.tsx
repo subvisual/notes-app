@@ -5,6 +5,7 @@ import slugify from "../lib/utils/slugify";
 
 export default function NoteEditor() {
   const {
+    user: { signedKey },
     userNotes: { updateNote, removeNote },
     session: { openNote, setOpenNote },
   } = useStore();
@@ -49,7 +50,7 @@ export default function NoteEditor() {
       ...(updateTags && { tags }),
     };
 
-    updateNote(openNote.id, updatedNote);
+    updateNote(openNote.id, updatedNote, signedKey);
 
     setUpdateName(false);
     setUpdateContent(false);
@@ -87,7 +88,7 @@ export default function NoteEditor() {
     if (!openNote) return;
 
     if (editTags && updateTags) {
-      updateNote(openNote.id, { tags });
+      updateNote(openNote.id, { tags }, signedKey);
       setUpdateTags(false);
     }
 

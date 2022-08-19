@@ -15,6 +15,7 @@ type UserType = {
 type FolderType = {
   id: string;
   name: string;
+  user: string;
 };
 
 type NoteType = {
@@ -24,4 +25,5 @@ type NoteType = {
   folder: string;
   tags: string;
   content: string;
+  user: string;
 };

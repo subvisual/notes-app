@@ -7,7 +7,7 @@ type AddFolderProps = {
 
 export default function AddFolder({ closeModal }: AddFolderProps) {
   const {
-    user: { userSig },
+    user: { userSig, signedKey },
     userFolders: { addFolder },
   } = useStore();
   const defaultName = "New Folder";
@@ -19,7 +19,7 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    addFolder({ name: folderName, user: userSig });
+    addFolder({ name: folderName, user: userSig }, signedKey);
     closeModal();
   };
 

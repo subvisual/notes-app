@@ -73,8 +73,8 @@ export default function Connect() {
       setAuthState("Connected");
       setIsConnected(true);
 
-      getAllNotes(userSignature);
-      getFolders(userSignature);
+      getAllNotes(userSignature, signedKey);
+      getFolders(userSignature, signedKey);
     } catch (err: any) {
       if (err.code === 4001) {
         setAuthState("");
