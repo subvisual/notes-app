@@ -7,7 +7,11 @@ type TagsProps = {
   handleChangeTags: (ev: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function NoteTags({ tags, editMode, handleChangeTags }: TagsProps) {
+export default function NoteTags({
+  tags,
+  editMode,
+  handleChangeTags,
+}: TagsProps) {
   const tagsArray = splitTags(tags);
 
   return (
@@ -16,7 +20,7 @@ export default function NoteTags({ tags, editMode, handleChangeTags }: TagsProps
         <input value={tags} onChange={handleChangeTags} />
       ) : (
         <ul className="flex">
-          {tagsArray.map(tag => (
+          {tagsArray.map((tag) => (
             <li key={tag} className="before:content-['#']">
               {tag}
             </li>

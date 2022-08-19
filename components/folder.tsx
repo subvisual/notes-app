@@ -14,9 +14,10 @@ export default function Folder({ folder }: FolderProps) {
     session: { openNote },
   } = useStore();
 
-  const notes = useMemo(() => {
-    return allNotes.filter(note => note.folder === folder.id);
-  }, [allNotes, folder.id]);
+  const notes = useMemo(
+    () => allNotes.filter((note) => note.folder === folder.id),
+    [allNotes, folder.id],
+  );
 
   useEffect(() => {
     if (openNote?.folder === folder.id) {

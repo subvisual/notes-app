@@ -17,9 +17,14 @@ export default function AddNote({ closeModal }: AddNoteProps) {
   const [noteName, setNoteName] = useState<string>(defaultName);
   const [folderId, setFolderId] = useState<string>("");
 
-  const createNote = async (noteName: string, folderId: string) => {
+  const createNote = async () => {
     const slug = slugify(noteName);
-    const newNote = await addNote({ name: noteName, slug, folder: folderId, user: userSig });
+    const newNote = await addNote({
+      name: noteName,
+      slug,
+      folder: folderId,
+      user: userSig,
+    });
 
     if (newNote) setOpenNote(newNote);
   };
@@ -34,25 +39,37 @@ export default function AddNote({ closeModal }: AddNoteProps) {
 
   const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    createNote(noteName, folderId);
+    createNote();
     closeModal();
   };
 
   return (
     <>
       <h2 className="text-center">Add note</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col text-center items-center">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col text-center items-center"
+      >
         <label htmlFor="new-note-name">
           Name:
-          <input id="new-note-name" value={noteName} onChange={handleNameChange} />
+          <input
+            id="new-note-name"
+            value={noteName}
+            onChange={handleNameChange}
+          />
         </label>
         <label htmlFor="new-note-folder">
           Folder:
-          <select id="new-note-folder" required value={folderId} onChange={handleFolderChange}>
+          <select
+            id="new-note-folder"
+            required
+            value={folderId}
+            onChange={handleFolderChange}
+          >
             <option disabled value="">
               Choose a folder
             </option>
-            {folders.map(folder => (
+            {folders.map((folder) => (
               <option key={folder.id} value={folder.id}>
                 {folder.name}
               </option>

@@ -8,7 +8,7 @@ export default function TagsList() {
 
   return (
     <div>
-      {tags.map(tag => (
+      {tags.map((tag) => (
         <Tag key={tag} tag={tag} />
       ))}
     </div>

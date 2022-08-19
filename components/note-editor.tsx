@@ -30,10 +30,13 @@ export default function NoteEditor() {
 
   useEffect(() => {
     resetState();
+
     if (!openNote) return;
 
     setName(openNote.name);
+
     if (openNote.content) setContent(openNote.content);
+
     if (openNote.tags) setTags(openNote.tags);
   }, [openNote]);
 
@@ -41,8 +44,8 @@ export default function NoteEditor() {
     if (!openNote) return;
 
     const updatedNote = {
-      ...(updateName && { name: name, slug: slugify(name) }),
-      ...(updateContent && { content: content }),
+      ...(updateName && { name, slug: slugify(name) }),
+      ...(updateContent && { content }),
       ...(updateTags && { tags }),
     };
 
@@ -78,7 +81,7 @@ export default function NoteEditor() {
     if (!updateTags) setUpdateTags(true);
   };
 
-  const toggleEditNote = () => setEditNote(prevEditNote => !prevEditNote);
+  const toggleEditNote = () => setEditNote((prevEditNote) => !prevEditNote);
 
   const toggleEditTags = async () => {
     if (!openNote) return;
@@ -88,7 +91,7 @@ export default function NoteEditor() {
       setUpdateTags(false);
     }
 
-    setEditTags(prevEditTags => !prevEditTags);
+    setEditTags((prevEditTags) => !prevEditTags);
   };
 
   return (
@@ -96,7 +99,11 @@ export default function NoteEditor() {
       {openNote && (
         <div className="flex flex-col">
           <div className="bg-slate-300 flex justify-between">
-            <NoteTags tags={tags} editMode={editTags} handleChangeTags={tagChangeHandler} />
+            <NoteTags
+              tags={tags}
+              editMode={editTags}
+              handleChangeTags={tagChangeHandler}
+            />
             <button
               className={`${editTags && "bg-blue-400"} p-2`}
               type="button"

@@ -1,20 +1,25 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import nc from 'next-connect';
-import { createFolder, deleteFolder, getFoldersBySig, updateFolder } from './db';
+import type { NextApiRequest, NextApiResponse } from "next";
+import nc from "next-connect";
+import { FolderType } from "../..";
+import {
+  createFolder,
+  deleteFolder,
+  getFoldersBySig,
+  updateFolder,
+} from "./db";
 
 type Data = {
-  folders?: any[];
-  folder?: any;
+  folders?: FolderType[];
+  folder?: FolderType;
   message?: string;
 };
 
 const handler = nc<NextApiRequest, NextApiResponse<Data>>({
-  onError: (err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).end('Something broke!');
+  onError: (err, req, res) => {
+    res.status(500).end("Something broke!");
   },
   onNoMatch: (req, res) => {
-    res.status(404).end('Page is not found');
+    res.status(404).end("Page is not found");
   },
 })
   .get(async (req, res) => {
@@ -30,7 +35,7 @@ const handler = nc<NextApiRequest, NextApiResponse<Data>>({
     const { data } = await createFolder({ name, user });
 
     if (data?.length) {
-      res.status(200).json({ message: 'Folder created', folder: data[0] });
+      res.status(200).json({ message: "Folder created", folder: data[0] });
     }
   })
   .delete(async (req, res) => {
@@ -38,7 +43,7 @@ const handler = nc<NextApiRequest, NextApiResponse<Data>>({
     const { data } = await deleteFolder(id as string);
 
     if (data?.length) {
-      res.status(200).json({ message: 'Folder deleted', folder: data[0] });
+      res.status(200).json({ message: "Folder deleted", folder: data[0] });
     }
   })
   .put(async (req, res) => {
@@ -47,7 +52,7 @@ const handler = nc<NextApiRequest, NextApiResponse<Data>>({
     const { data } = await updateFolder(id as string, name);
 
     if (data?.length) {
-      res.status(200).json({ message: 'Folder updated', folder: data[0] });
+      res.status(200).json({ message: "Folder updated", folder: data[0] });
     }
   });
 
