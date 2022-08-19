@@ -8,7 +8,7 @@ type AddNoteProps = {
 
 export default function AddNote({ closeModal }: AddNoteProps) {
   const {
-    user: { userSig },
+    user: { userSig, signedKey },
     userFolders: { folders },
     userNotes: { addNote },
     session: { setOpenNote },
@@ -19,12 +19,15 @@ export default function AddNote({ closeModal }: AddNoteProps) {
 
   const createNote = async () => {
     const slug = slugify(noteName);
-    const newNote = await addNote({
-      name: noteName,
-      slug,
-      folder: folderId,
-      user: userSig,
-    });
+    const newNote = await addNote(
+      {
+        name: noteName,
+        slug,
+        folder: folderId,
+        user: userSig,
+      },
+      signedKey,
+    );
 
     if (newNote) setOpenNote(newNote);
   };

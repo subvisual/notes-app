@@ -2,6 +2,7 @@ import create from "zustand";
 import axios from "./axios";
 import { NoteType, FolderType } from "..";
 import splitTags from "./utils/split-tags";
+import { encryptData, decryptData } from "./utils/crypto";
 
 export enum Theme {
   Light = "light",
@@ -17,22 +18,32 @@ type UseStore = {
   };
   userNotes: {
     allNotes: NoteType[];
-    getAllNotes: (userSignature: string) => void;
-    addNote: (params: {
-      name: string;
-      slug: string;
-      folder: string;
-      user: string;
-    }) => Promise<NoteType | null>;
+    getAllNotes: (userSignature: string, signedKey: string) => void;
+    addNote: (
+      params: {
+        name: string;
+        slug: string;
+        folder: string;
+        user: string;
+      },
+      signedKey: string,
+    ) => Promise<NoteType | null>;
     removeNote: (id: string) => void;
-    updateNote: (id: string, params: Record<string, string>) => void;
+    updateNote: (
+      id: string,
+      params: Record<string, string>,
+      signedKey: string,
+    ) => void;
   };
   userFolders: {
     folders: FolderType[];
-    getFolders: (userSignature: string) => void;
-    addFolder: (params: { name: string; user: string }) => void;
+    getFolders: (userSignature: string, signedKey: string) => void;
+    addFolder: (
+      params: { name: string; user: string },
+      signedKey: string,
+    ) => void;
     removeFolder: (id: string) => void;
-    updateFolder: (id: string, name: string) => void;
+    updateFolder: (id: string, name: string, signedKey: string) => void;
   };
   userTags: {
     tags: string[];
@@ -59,37 +70,58 @@ export const useStore = create<UseStore>()((set) => ({
     setSignedKey: (signedKey: string) =>
       set((state) => ({ ...state, user: { ...state.user, signedKey } })),
   },
+
   userNotes: {
     allNotes: [],
-    getAllNotes: async (userSignature: string) => {
+    getAllNotes: async (userSignature: string, signedKey: string) => {
       const res = await axios.get(`notes?userSig=${userSignature}`);
 
       if (res.status !== 200) return;
 
+      const decryptedNotes = res.data.notes.map((note: NoteType) => ({
+        ...note,
+        ...(note.name && {
+          name: decryptData(note.name, signedKey),
+          slug: decryptData(note.slug, signedKey),
+        }),
+        ...(note.tags && { tags: decryptData(note.tags, signedKey) }),
+        ...(note.content && { content: decryptData(note.content, signedKey) }),
+      }));
+
       set((state) => ({
         ...state,
-        userNotes: { ...state.userNotes, allNotes: res.data.notes },
+        userNotes: { ...state.userNotes, allNotes: decryptedNotes },
       }));
     },
-    addNote: async (params: {
-      name: string;
-      slug: string;
-      folder: string;
-      user: string;
-    }): Promise<NoteType | null> => {
-      const res = await axios.post("notes", params);
+    addNote: async (
+      params: {
+        name: string;
+        slug: string;
+        folder: string;
+        user: string;
+      },
+      signedKey: string,
+    ): Promise<NoteType | null> => {
+      const encryptedNote = {
+        ...params,
+        name: encryptData(params.name, signedKey),
+        slug: encryptData(params.slug, signedKey),
+      };
+      const res = await axios.post("notes", encryptedNote);
 
       if (res.status !== 200) return null;
+
+      const decryptedNote = { ...res.data.note, ...params };
 
       set((state) => ({
         ...state,
         userNotes: {
           ...state.userNotes,
-          allNotes: [...state.userNotes.allNotes, res.data.note],
+          allNotes: [...state.userNotes.allNotes, decryptedNote],
         },
       }));
 
-      return res.data.note;
+      return decryptedNote;
     },
     removeNote: async (id: string) => {
       const res = await axios.delete(`notes?id=${id}`);
@@ -104,8 +136,23 @@ export const useStore = create<UseStore>()((set) => ({
         },
       }));
     },
-    updateNote: async (id: string, params: Record<string, string>) => {
-      const res = await axios.put(`notes?id=${id}`, params);
+    updateNote: async (
+      id: string,
+      params: Record<string, string>,
+      signedKey: string,
+    ) => {
+      const encryptedNote = {
+        ...params,
+        ...(params.name && {
+          name: encryptData(params.name, signedKey),
+          slug: encryptData(params.slug, signedKey),
+        }),
+        ...(params.tags && { tags: encryptData(params.tags, signedKey) }),
+        ...(params.content && {
+          content: encryptData(params.content, signedKey),
+        }),
+      };
+      const res = await axios.put(`notes?id=${id}`, encryptedNote);
 
       if (res.status !== 200) return;
 
@@ -120,20 +167,35 @@ export const useStore = create<UseStore>()((set) => ({
       }));
     },
   },
+
   userFolders: {
     folders: [],
-    getFolders: async (userSignature: string) => {
+    getFolders: async (userSignature: string, signedKey: string) => {
       const res = await axios.get(`folders?userSig=${userSignature}`);
 
       if (res.status !== 200) return;
 
+      const decryptedFolders = res.data.folders.map((folder: FolderType) => ({
+        ...folder,
+        ...(folder.name && {
+          name: decryptData(folder.name, signedKey),
+        }),
+      }));
+
       set((state) => ({
         ...state,
-        userFolders: { ...state.userFolders, folders: res.data.folders },
+        userFolders: { ...state.userFolders, folders: decryptedFolders },
       }));
     },
-    addFolder: async (params: { name: string; user: string }) => {
-      const res = await axios.post("folders", params);
+    addFolder: async (
+      params: { name: string; user: string },
+      signedKey: string,
+    ) => {
+      const encryptedNote = {
+        user: params.user,
+        name: encryptData(params.name, signedKey),
+      };
+      const res = await axios.post("folders", encryptedNote);
 
       if (res.status !== 200) return;
 
@@ -141,7 +203,10 @@ export const useStore = create<UseStore>()((set) => ({
         ...state,
         userFolders: {
           ...state.userFolders,
-          folders: [...state.userFolders.folders, res.data.folder],
+          folders: [
+            ...state.userFolders.folders,
+            { ...res.data.folder, ...params },
+          ],
         },
       }));
     },
@@ -160,8 +225,10 @@ export const useStore = create<UseStore>()((set) => ({
         },
       }));
     },
-    updateFolder: async (id: string, name: string) => {
-      const res = await axios.put(`folders?id=${id}`, { name });
+    updateFolder: async (id: string, name: string, signedKey: string) => {
+      const res = await axios.put(`folders?id=${id}`, {
+        name: encryptData(name, signedKey),
+      });
 
       if (res.status !== 200) return;
 
@@ -176,6 +243,7 @@ export const useStore = create<UseStore>()((set) => ({
       }));
     },
   },
+
   userTags: {
     tags: [],
     setTags: () =>
@@ -200,6 +268,7 @@ export const useStore = create<UseStore>()((set) => ({
         };
       }),
   },
+
   session: {
     isConnected: false,
     setIsConnected: (bool: boolean) =>
@@ -214,6 +283,7 @@ export const useStore = create<UseStore>()((set) => ({
         session: { ...state.session, openNote: note },
       })),
   },
+
   preferences: {
     theme: Theme.Dark,
     setTheme: (theme: Theme) =>
