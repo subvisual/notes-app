@@ -1,30 +1,27 @@
 import { ChangeEvent, useState, FormEvent } from "react";
-import Modal from "react-modal";
 import { useStore } from "../lib/store";
+import slugify from "../lib/utils/slugify";
 
-type AddNoteModalProps = {
+type AddNoteProps = {
   closeModal: () => void;
-  handleCreateNote: (name: string, folder: string) => void;
-  isOpen: boolean;
-  className: string;
 };
 
-export default function AddNoteModal({
-  closeModal,
-  handleCreateNote,
-  isOpen,
-  className,
-}: AddNoteModalProps) {
+export default function AddNote({ closeModal }: AddNoteProps) {
   const {
+    user: { userSig },
     userFolders: { folders },
+    userNotes: { addNote },
+    session: { setOpenNote },
   } = useStore();
   const defaultName = "New Note";
   const [noteName, setNoteName] = useState<string>(defaultName);
   const [folderId, setFolderId] = useState<string>("");
 
-  const resetModal = () => {
-    setNoteName(defaultName);
-    setFolderId("");
+  const createNote = async (noteName: string, folderId: string) => {
+    const slug = slugify(noteName);
+    const newNote = await addNote({ name: noteName, slug, folder: folderId, user: userSig });
+
+    if (newNote) setOpenNote(newNote);
   };
 
   const handleNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -35,20 +32,14 @@ export default function AddNoteModal({
     setFolderId(ev.target.value);
   };
 
-  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    handleCreateNote(noteName, folderId);
+    createNote(noteName, folderId);
     closeModal();
   };
 
   return (
-    <Modal
-      className={className}
-      isOpen={isOpen}
-      ariaHideApp={false}
-      contentLabel="Add Note Modal"
-      onAfterClose={resetModal}
-    >
+    <>
       <h2 className="text-center">Add note</h2>
       <form onSubmit={handleSubmit} className="flex flex-col text-center items-center">
         <label htmlFor="new-note-name">
@@ -77,6 +68,6 @@ export default function AddNoteModal({
           </button>
         </div>
       </form>
-    </Modal>
+    </>
   );
 }

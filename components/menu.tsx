@@ -1,46 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEvent } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import FoldersList from "./folders-list";
-import AddNoteModal from "./add-note-modal";
-import AddFolderModal from "./add-folder-modal";
-import DeleteFolderModal from "./delete-folder-modal";
 import { useStore } from "../lib/store";
 import TagsList from "./tags-list";
-import slugify from "../lib/utils/slugify";
+import Modal from "react-modal";
+import AddNote from "./add-note";
+import AddFolder from "./add-folder";
+import DeleteFolder from "./delete-folder";
+
+export enum ModalActions {
+  AddNote = "addNote",
+  AddFolder = "addFolder",
+  DeleteFolder = "deleteFolder",
+  None = "",
+}
 
 export default function Menu() {
   const {
-    user: { userSig },
-    userNotes: { addNote, allNotes },
-    userFolders: { addFolder, removeFolder },
+    userNotes: { allNotes },
     userTags: { setTags },
-    session: { setOpenNote },
   } = useStore();
-  const [isAddFolderModalOpen, setIsAddFolderModalOpen] = useState<boolean>(false);
-  const [isDeleteFolderModalOpen, setIsDeleteFolderModalOpen] = useState<boolean>(false);
-  const [isAddNoteModalOpen, setIsAddNoteModalOpen] = useState<boolean>(false);
+  const [modalAction, setModalAction] = useState<ModalActions>(ModalActions.None);
 
   useEffect(() => {
     setTags();
   }, [allNotes]);
 
-  const createFolder = (folderName: string) => addFolder({ name: folderName, user: userSig });
+  const changeModalAction = (ev: MouseEvent) =>
+    setModalAction((ev.target as HTMLButtonElement).value as ModalActions);
 
-  const deleteFolder = (folderId: string) => removeFolder(folderId);
-
-  const createNote = async (noteName: string, folderId: string) => {
-    const slug = slugify(noteName);
-    const newNote = await addNote({ name: noteName, slug, folder: folderId, user: userSig });
-
-    if (newNote) setOpenNote(newNote);
-  };
-
-  const closeAddFolderModal = () => setIsAddFolderModalOpen(false);
-  const openAddFolderModal = () => setIsAddFolderModalOpen(true);
-  const closeAddNoteModal = () => setIsAddNoteModalOpen(false);
-  const openAddNoteModal = () => setIsAddNoteModalOpen(true);
-  const closeDeleteFolderModal = () => setIsDeleteFolderModalOpen(false);
-  const openDeleteFolderModal = () => setIsDeleteFolderModalOpen(true);
+  const closeModal = () => setModalAction(ModalActions.None);
 
   return (
     <div className="bg-slate-300 h-full flex flex-col justify-between w-1/5">
@@ -57,33 +46,39 @@ export default function Menu() {
           <TagsList />
         </TabPanel>
       </Tabs>
-      <button type="button" className="p-2" onClick={openAddFolderModal}>
-        ADD FOLDER
-      </button>
-      <button type="button" className="p-2" onClick={openAddNoteModal}>
+      <button
+        type="button"
+        className="p-2"
+        onClick={changeModalAction}
+        value={ModalActions.AddNote}
+      >
         ADD NOTE
       </button>
-      <button type="button" className="p-2" onClick={openDeleteFolderModal}>
+      <button
+        type="button"
+        className="p-2"
+        onClick={changeModalAction}
+        value={ModalActions.AddFolder}
+      >
+        ADD FOLDER
+      </button>
+      <button
+        type="button"
+        className="p-2"
+        onClick={changeModalAction}
+        value={ModalActions.DeleteFolder}
+      >
         DELETE FOLDER
       </button>
-      <AddFolderModal
+      <Modal
+        isOpen={!!modalAction}
         className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
-        closeModal={closeAddFolderModal}
-        handleCreateFolder={createFolder}
-        isOpen={isAddFolderModalOpen}
-      />
-      <AddNoteModal
-        className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
-        closeModal={closeAddNoteModal}
-        handleCreateNote={createNote}
-        isOpen={isAddNoteModalOpen}
-      />
-      <DeleteFolderModal
-        className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
-        closeModal={closeDeleteFolderModal}
-        handleDeleteFolder={deleteFolder}
-        isOpen={isDeleteFolderModalOpen}
-      />
+        ariaHideApp={false}
+      >
+        {modalAction === ModalActions.AddNote && <AddNote closeModal={closeModal} />}
+        {modalAction === ModalActions.AddFolder && <AddFolder closeModal={closeModal} />}
+        {modalAction === ModalActions.DeleteFolder && <DeleteFolder closeModal={closeModal} />}
+      </Modal>
     </div>
   );
 }

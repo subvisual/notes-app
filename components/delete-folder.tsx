@@ -1,28 +1,17 @@
-import Modal from "react-modal";
 import { ChangeEvent, useState, FormEvent } from "react";
 import { useStore } from "../lib/store";
 
-type DeleteFolderModalProps = {
+type DeleteFolderProps = {
   closeModal: () => void;
-  handleDeleteFolder: (folderId: string) => void;
-  isOpen: boolean;
-  className: string;
 };
 
-export default function DeleteFolderModal({
-  closeModal,
-  handleDeleteFolder,
-  isOpen,
-  className,
-}: DeleteFolderModalProps) {
+export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
   const {
-    userFolders: { folders },
+    userFolders: { folders, removeFolder },
   } = useStore();
   const [folderId, setFolderId] = useState<string>("");
 
-  const resetModal = () => {
-    setFolderId("");
-  };
+  const deleteFolder = (folderId: string) => removeFolder(folderId);
 
   const handleFolderChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     setFolderId(ev.target.value);
@@ -31,19 +20,14 @@ export default function DeleteFolderModal({
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    if (folderId) handleDeleteFolder(folderId);
+    if (!folderId) return;
+    deleteFolder(folderId);
 
     closeModal();
   };
 
   return (
-    <Modal
-      className={className}
-      isOpen={isOpen}
-      ariaHideApp={false}
-      contentLabel="Delete Folder Modal"
-      onAfterClose={resetModal}
-    >
+    <>
       <h2 className="text-center">Delete folder</h2>
       <form onSubmit={handleSubmit} className="flex flex-col text-center items-center">
         <label htmlFor="delete-folder-name">
@@ -68,6 +52,6 @@ export default function DeleteFolderModal({
           </button>
         </div>
       </form>
-    </Modal>
+    </>
   );
 }

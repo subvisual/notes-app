@@ -1,25 +1,19 @@
 import { ChangeEvent, useState, FormEvent } from "react";
-import Modal from "react-modal";
+import { useStore } from "../lib/store";
 
-type AddFolderModalProps = {
+type AddFolderProps = {
   closeModal: () => void;
-  handleCreateFolder: (name: string) => void;
-  isOpen: boolean;
-  className: string;
 };
 
-export default function AddFolderModal({
-  closeModal,
-  handleCreateFolder,
-  isOpen,
-  className,
-}: AddFolderModalProps) {
+export default function AddFolder({ closeModal }: AddFolderProps) {
+  const {
+    user: { userSig },
+    userFolders: { addFolder },
+  } = useStore();
   const defaultName = "New Folder";
   const [folderName, setFolderName] = useState<string>(defaultName);
 
-  const resetModal = () => {
-    setFolderName(defaultName);
-  };
+  const createFolder = (folderName: string) => addFolder({ name: folderName, user: userSig });
 
   const handleNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setFolderName(ev.target.value);
@@ -27,18 +21,12 @@ export default function AddFolderModal({
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    handleCreateFolder(folderName);
+    createFolder(folderName);
     closeModal();
   };
 
   return (
-    <Modal
-      className={className}
-      isOpen={isOpen}
-      ariaHideApp={false}
-      contentLabel="Add Folder Modal"
-      onAfterClose={resetModal}
-    >
+    <>
       <h2 className="text-center">Add folder</h2>
       <form onSubmit={handleSubmit} className="flex flex-col text-center items-center">
         <label htmlFor="new-folder-name">
@@ -54,6 +42,6 @@ export default function AddFolderModal({
           </button>
         </div>
       </form>
-    </Modal>
+    </>
   );
 }
