@@ -1,6 +1,8 @@
-import Head from 'next/head';
-import Connect from '../components/connect';
-import { useStore } from '../lib/store';
+import Head from "next/head";
+import Connect from "../components/connect";
+import Menu from "../components/menu";
+import NoteEditor from "../components/note-editor";
+import { useStore } from "../lib/store";
 
 export default function Home() {
   const {
@@ -8,14 +10,23 @@ export default function Home() {
   } = useStore();
 
   return (
-    <div>
+    <div className="h-full">
       <Head>
         <title>Notes App</title>
-        <meta name='description' content='secure notes app' />
-        <link rel='icon' href='/favicon.ico' />
+        <meta name="description" content="secure notes app" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>{isConnected ? <div>User connected</div> : <Connect />}</main>
+      <main className="flex h-full">
+        {isConnected ? (
+          <>
+            <Menu />
+            <NoteEditor />
+          </>
+        ) : (
+          <Connect />
+        )}
+      </main>
     </div>
   );
 }

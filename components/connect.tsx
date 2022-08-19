@@ -10,6 +10,8 @@ export default function Connect() {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const {
     user: { setUserSig, setSignedKey },
+    userNotes: { getAllNotes },
+    userFolders: { getFolders },
     session: { isConnected, setIsConnected },
   } = useStore();
 
@@ -68,6 +70,9 @@ export default function Connect() {
       setIsConnecting(false);
       setAuthState("Connected");
       setIsConnected(true);
+
+      getAllNotes(userSignature);
+      getFolders(userSignature);
     } catch (err: any) {
       if (err.code === 4001) {
         setAuthState("");
