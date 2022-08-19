@@ -1,18 +1,18 @@
 import { useState, useEffect, MouseEvent } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import Modal from "react-modal";
 import FoldersList from "./folders-list";
 import { useStore } from "../lib/store";
 import TagsList from "./tags-list";
-import Modal from "react-modal";
 import AddNote from "./add-note";
 import AddFolder from "./add-folder";
 import DeleteFolder from "./delete-folder";
 
-export enum ModalActions {
-  AddNote = "addNote",
-  AddFolder = "addFolder",
-  DeleteFolder = "deleteFolder",
-  None = "",
+enum ModalActions {
+  ADD_NOTE = "addNote",
+  ADD_FOLDER = "addFolder",
+  DELETE_FOLDER = "deleteFolder",
+  NONE = "",
 }
 
 export default function Menu() {
@@ -20,16 +20,18 @@ export default function Menu() {
     userNotes: { allNotes },
     userTags: { setTags },
   } = useStore();
-  const [modalAction, setModalAction] = useState<ModalActions>(ModalActions.None);
+  const [modalAction, setModalAction] = useState<ModalActions>(
+    ModalActions.NONE,
+  );
 
   useEffect(() => {
     setTags();
-  }, [allNotes]);
+  }, [allNotes, setTags]);
 
   const changeModalAction = (ev: MouseEvent) =>
     setModalAction((ev.target as HTMLButtonElement).value as ModalActions);
 
-  const closeModal = () => setModalAction(ModalActions.None);
+  const closeModal = () => setModalAction(ModalActions.NONE);
 
   return (
     <div className="bg-slate-300 h-full flex flex-col justify-between w-1/5">
@@ -50,7 +52,7 @@ export default function Menu() {
         type="button"
         className="p-2"
         onClick={changeModalAction}
-        value={ModalActions.AddNote}
+        value={ModalActions.ADD_NOTE}
       >
         ADD NOTE
       </button>
@@ -58,7 +60,7 @@ export default function Menu() {
         type="button"
         className="p-2"
         onClick={changeModalAction}
-        value={ModalActions.AddFolder}
+        value={ModalActions.ADD_FOLDER}
       >
         ADD FOLDER
       </button>
@@ -66,7 +68,7 @@ export default function Menu() {
         type="button"
         className="p-2"
         onClick={changeModalAction}
-        value={ModalActions.DeleteFolder}
+        value={ModalActions.DELETE_FOLDER}
       >
         DELETE FOLDER
       </button>
@@ -75,9 +77,15 @@ export default function Menu() {
         className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
         ariaHideApp={false}
       >
-        {modalAction === ModalActions.AddNote && <AddNote closeModal={closeModal} />}
-        {modalAction === ModalActions.AddFolder && <AddFolder closeModal={closeModal} />}
-        {modalAction === ModalActions.DeleteFolder && <DeleteFolder closeModal={closeModal} />}
+        {modalAction === ModalActions.ADD_NOTE && (
+          <AddNote closeModal={closeModal} />
+        )}
+        {modalAction === ModalActions.ADD_FOLDER && (
+          <AddFolder closeModal={closeModal} />
+        )}
+        {modalAction === ModalActions.DELETE_FOLDER && (
+          <DeleteFolder closeModal={closeModal} />
+        )}
       </Modal>
     </div>
   );

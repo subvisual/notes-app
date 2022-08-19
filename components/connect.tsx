@@ -19,6 +19,7 @@ export default function Connect() {
     if (!window.ethereum) {
       setAuthState("Please install MetaMask wallet");
       setHasMetamask(false);
+
       return;
     }
 
@@ -39,13 +40,14 @@ export default function Connect() {
       setAuthState("Please sign the message...");
 
       const userSignature = await signer.signMessage(
-        `Hi, please sign this message: ${process.env.NEXT_PUBLIC_RANDOM_STRING}`
+        `Hi, please sign this message: ${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
       );
 
       let key = "";
 
       try {
         const res = await axios.get(`users?userSig=${userSignature}`);
+
         key = res?.data.userData.key;
       } catch (err: any) {
         if (err.data.message === "User not found") {

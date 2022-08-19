@@ -11,8 +11,6 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
   } = useStore();
   const [folderId, setFolderId] = useState<string>("");
 
-  const deleteFolder = (folderId: string) => removeFolder(folderId);
-
   const handleFolderChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     setFolderId(ev.target.value);
   };
@@ -21,22 +19,30 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
     ev.preventDefault();
 
     if (!folderId) return;
-    deleteFolder(folderId);
 
+    removeFolder(folderId);
     closeModal();
   };
 
   return (
     <>
       <h2 className="text-center">Delete folder</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col text-center items-center">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col text-center items-center"
+      >
         <label htmlFor="delete-folder-name">
           Folder:
-          <select id="delete-folder-name" required value={folderId} onChange={handleFolderChange}>
+          <select
+            id="delete-folder-name"
+            required
+            value={folderId}
+            onChange={handleFolderChange}
+          >
             <option disabled value="">
               Choose a folder
             </option>
-            {folders.map(folder => (
+            {folders.map((folder) => (
               <option key={folder.id} value={folder.id}>
                 {folder.name}
               </option>

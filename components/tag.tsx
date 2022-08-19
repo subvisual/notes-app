@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
 import splitTags from "../lib/utils/split-tags";
-import { NoteType } from "..";
 
 type TagProps = {
   tag: string;
@@ -16,15 +15,15 @@ export default function Tag({ tag }: TagProps) {
 
   const notes = useMemo(
     () =>
-      allNotes.filter(note => {
+      allNotes.filter((note) => {
         if (!note.tags) return false;
 
         const noteTags = splitTags(note.tags);
 
-        return noteTags.some(() => noteTags.includes(tag));
+        return noteTags.includes(tag);
       }),
 
-    [allNotes, tag]
+    [allNotes, tag],
   );
 
   const toggleNotes = () => setShowNotes(!showNotes);

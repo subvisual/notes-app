@@ -50,13 +50,14 @@ type UseStore = {
   };
 };
 
-export const useStore = create<UseStore>()(set => ({
+export const useStore = create<UseStore>()((set) => ({
   user: {
     userSig: "",
     signedKey: "",
-    setUserSig: (userSig: string) => set(state => ({ ...state, user: { ...state.user, userSig } })),
+    setUserSig: (userSig: string) =>
+      set((state) => ({ ...state, user: { ...state.user, userSig } })),
     setSignedKey: (signedKey: string) =>
-      set(state => ({ ...state, user: { ...state.user, signedKey } })),
+      set((state) => ({ ...state, user: { ...state.user, signedKey } })),
   },
   userNotes: {
     allNotes: [],
@@ -65,7 +66,7 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userNotes: { ...state.userNotes, allNotes: res.data.notes },
       }));
@@ -80,7 +81,7 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return null;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userNotes: {
           ...state.userNotes,
@@ -95,11 +96,11 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userNotes: {
           ...state.userNotes,
-          allNotes: state.userNotes.allNotes.filter(note => note.id !== id),
+          allNotes: state.userNotes.allNotes.filter((note) => note.id !== id),
         },
       }));
     },
@@ -108,12 +109,12 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userNotes: {
           ...state.userNotes,
-          allNotes: state.userNotes.allNotes.map(note =>
-            note.id === id ? { ...note, ...params } : note
+          allNotes: state.userNotes.allNotes.map((note) =>
+            note.id === id ? { ...note, ...params } : note,
           ),
         },
       }));
@@ -126,7 +127,7 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userFolders: { ...state.userFolders, folders: res.data.folders },
       }));
@@ -136,7 +137,7 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userFolders: {
           ...state.userFolders,
@@ -149,11 +150,13 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userFolders: {
           ...state.userFolders,
-          folders: state.userFolders.folders.filter(folder => folder.id !== id),
+          folders: state.userFolders.folders.filter(
+            (folder) => folder.id !== id,
+          ),
         },
       }));
     },
@@ -162,12 +165,12 @@ export const useStore = create<UseStore>()(set => ({
 
       if (res.status !== 200) return;
 
-      set(state => ({
+      set((state) => ({
         ...state,
         userFolders: {
           ...state.userFolders,
-          folders: state.userFolders.folders.map(folder =>
-            folder.id === id ? { ...folder, name } : folder
+          folders: state.userFolders.folders.map((folder) =>
+            folder.id === id ? { ...folder, name } : folder,
           ),
         },
       }));
@@ -176,15 +179,21 @@ export const useStore = create<UseStore>()(set => ({
   userTags: {
     tags: [],
     setTags: () =>
-      set(state => {
-        const tags = state.userNotes.allNotes.reduce((previousTags, currentNote) => {
-          if (!currentNote.tags) return [...previousTags];
+      set((state) => {
+        const tags = state.userNotes.allNotes.reduce(
+          (previousTags, currentNote) => {
+            if (!currentNote.tags) return [...previousTags];
 
-          return [
-            ...previousTags,
-            ...splitTags(currentNote.tags).filter(tag => !previousTags.includes(tag)),
-          ];
-        }, [] as string[]);
+            return [
+              ...previousTags,
+              ...splitTags(currentNote.tags).filter(
+                (tag) => !previousTags.includes(tag),
+              ),
+            ];
+          },
+          [] as string[],
+        );
+
         return {
           ...state,
           userTags: { ...state.userTags, tags },
@@ -194,13 +203,13 @@ export const useStore = create<UseStore>()(set => ({
   session: {
     isConnected: false,
     setIsConnected: (bool: boolean) =>
-      set(state => ({
+      set((state) => ({
         ...state,
         session: { ...state.session, isConnected: bool },
       })),
     openNote: null,
     setOpenNote: (note: NoteType | null) =>
-      set(state => ({
+      set((state) => ({
         ...state,
         session: { ...state.session, openNote: note },
       })),
@@ -208,7 +217,7 @@ export const useStore = create<UseStore>()(set => ({
   preferences: {
     theme: Theme.Dark,
     setTheme: (theme: Theme) =>
-      set(state => ({
+      set((state) => ({
         ...state,
         preferences: { ...state.preferences, theme },
       })),
