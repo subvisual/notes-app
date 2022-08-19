@@ -3,12 +3,12 @@ import { useStore } from "../lib/store";
 
 export default function FoldersList() {
   const {
-    userFolders: { folders },
+    userFolders: { filteredFolders },
   } = useStore();
 
   return (
     <div>
-      {folders.map((folder) => (
+      {filteredFolders.map((folder) => (
         <Folder key={folder.id} folder={folder} />
       ))}
     </div>

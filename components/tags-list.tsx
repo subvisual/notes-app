@@ -3,12 +3,12 @@ import { useStore } from "../lib/store";
 
 export default function TagsList() {
   const {
-    userTags: { tags },
+    userTags: { filteredTags },
   } = useStore();
 
   return (
     <div>
-      {tags.map((tag) => (
+      {filteredTags.map((tag) => (
         <Tag key={tag} tag={tag} />
       ))}
     </div>

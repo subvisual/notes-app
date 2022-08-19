@@ -10,13 +10,13 @@ type FolderProps = {
 export default function Folder({ folder }: FolderProps) {
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const {
-    userNotes: { allNotes },
+    userNotes: { filteredNotes },
     session: { openNote },
   } = useStore();
 
   const notes = useMemo(
-    () => allNotes.filter((note) => note.folder === folder.id),
-    [allNotes, folder.id],
+    () => filteredNotes.filter((note) => note.folder === folder.id),
+    [filteredNotes, folder.id],
   );
 
   useEffect(() => {
