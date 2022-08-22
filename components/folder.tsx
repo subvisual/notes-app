@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
+import useFilteredStore from "../lib/hooks/useFilteredStore";
 import { FolderType } from "..";
 
 type FolderProps = {
@@ -10,9 +11,9 @@ type FolderProps = {
 export default function Folder({ folder }: FolderProps) {
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const {
-    userNotes: { filteredNotes },
     session: { openNote },
   } = useStore();
+  const { filteredNotes } = useFilteredStore();
 
   const notes = useMemo(
     () => filteredNotes.filter((note) => note.folder === folder.id),

@@ -1,10 +1,8 @@
 import Folder from "./folder";
-import { useStore } from "../lib/store";
+import useFilteredStore from "../lib/hooks/useFilteredStore";
 
 export default function FoldersList() {
-  const {
-    userFolders: { filteredFolders },
-  } = useStore();
+  const { filteredFolders } = useFilteredStore();
 
   return (
     <div>

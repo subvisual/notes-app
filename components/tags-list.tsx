@@ -1,10 +1,8 @@
 import Tag from "./tag";
-import { useStore } from "../lib/store";
+import useFilteredStore from "../lib/hooks/useFilteredStore";
 
 export default function TagsList() {
-  const {
-    userTags: { filteredTags },
-  } = useStore();
+  const { filteredTags } = useFilteredStore();
 
   return (
     <div>
