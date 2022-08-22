@@ -2,7 +2,7 @@
 
 _We might come up with a better name, but for now it's the Notes App_
 
-This is a simple note taking app that makes the most of crypto wallets to annonimusly store notes. 
+This is a simple note taking app that makes the most of crypto wallets to anonymously store notes. 
 
 You can connect your wallet, and then sign two simple strings - the first will function as your unique identifier, the second as your decryption key.
 
