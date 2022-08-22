@@ -34,8 +34,6 @@ type UseStore = {
       params: Record<string, string>,
       signedKey: string,
     ) => void;
-    filteredNotes: NoteType[];
-    setFilteredNotes: (filteredNotes: NoteType[]) => void;
   };
   userFolders: {
     folders: FolderType[];
@@ -46,14 +44,14 @@ type UseStore = {
     ) => void;
     removeFolder: (id: string) => void;
     updateFolder: (id: string, name: string, signedKey: string) => void;
-    filteredFolders: FolderType[];
-    setFilteredFolders: (filteredFolders: FolderType[]) => void;
   };
   userTags: {
     tags: string[];
     setTags: () => void;
-    filteredTags: string[];
-    setFilteredTags: (filteredTags: string[]) => void;
+  };
+  search: {
+    searchTerm: string;
+    setSearchTerm: (str: string) => void;
   };
   session: {
     isConnected: boolean;
@@ -172,12 +170,6 @@ export const useStore = create<UseStore>()((set) => ({
         },
       }));
     },
-    filteredNotes: [],
-    setFilteredNotes: (filteredNotes: NoteType[]) =>
-      set((state) => ({
-        ...state,
-        userNotes: { ...state.userNotes, filteredNotes },
-      })),
   },
 
   userFolders: {
@@ -254,12 +246,6 @@ export const useStore = create<UseStore>()((set) => ({
         },
       }));
     },
-    filteredFolders: [],
-    setFilteredFolders: (filteredFolders: FolderType[]) =>
-      set((state) => ({
-        ...state,
-        userFolders: { ...state.userFolders, filteredFolders },
-      })),
   },
 
   userTags: {
@@ -285,11 +271,14 @@ export const useStore = create<UseStore>()((set) => ({
           userTags: { ...state.userTags, tags },
         };
       }),
-    filteredTags: [],
-    setFilteredTags: (filteredTags: string[]) =>
+  },
+
+  search: {
+    searchTerm: "",
+    setSearchTerm: (str: string) =>
       set((state) => ({
         ...state,
-        userTags: { ...state.userTags, filteredTags },
+        search: { ...state.search, searchTerm: str },
       })),
   },
 
