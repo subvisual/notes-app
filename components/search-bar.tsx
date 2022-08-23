@@ -20,14 +20,18 @@ export default function SearchBar() {
     <form
       onReset={reset}
       onSubmit={handleSubmit}
-      className="flex w-full justify-between bg-white"
+      className="my-5 flex w-full justify-between rounded-full bg-light-1 px-2 text-dark-1 shadow-[0_0px_15px_-5px_rgba(0,0,0,.25)] dark:bg-light-4 dark:shadow-none"
     >
       <input
-        className="w-full bg-transparent"
+        className="w-full bg-transparent outline-none"
         onChange={handleChange}
         type="text"
       />
-      <input className="m-0 border-none p-0" type="reset" value="&#x2715;" />
+      <input
+        className={`border-none ${!searchTerm && "invisible"}`}
+        type="reset"
+        value="&#x2715;"
+      />
     </form>
   );
 }

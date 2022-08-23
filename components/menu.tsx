@@ -8,6 +8,7 @@ import AddNote from "./add-note";
 import AddFolder from "./add-folder";
 import DeleteFolder from "./delete-folder";
 import SearchBar from "./search-bar";
+import Logo from "./logo";
 
 enum ModalActions {
   ADD_NOTE = "addNote",
@@ -35,8 +36,11 @@ export default function Menu() {
   const closeModal = () => setModalAction(ModalActions.NONE);
 
   return (
-    <div className="bg-slate-300 h-full flex flex-col justify-between items-center w-1/5">
-      <SearchBar />
+    <div className="max-w-96 flex h-full w-1/4 min-w-max flex-col items-center justify-between bg-light-2 dark:bg-dark-3">
+      <div className="px-6 pt-7">
+        <Logo />
+        <SearchBar />
+      </div>
       <Tabs className="grow">
         <TabList className="flex">
           <Tab>Folders</Tab>
