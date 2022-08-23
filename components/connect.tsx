@@ -38,11 +38,9 @@ export default function Connect() {
       const signer = provider.getSigner();
 
       setAuthState("Please sign the message...");
-
       const userSignature = await signer.signMessage(
         `Hi, please sign this message: ${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
       );
-
       let key = "";
 
       try {
@@ -72,7 +70,6 @@ export default function Connect() {
       setIsConnecting(false);
       setAuthState("Connected");
       setIsConnected(true);
-
       getAllNotes(userSignature, signedKey);
       getFolders(userSignature, signedKey);
     } catch (err: any) {
@@ -87,9 +84,14 @@ export default function Connect() {
   };
 
   return (
-    <div>
+    <div className="mx-auto mt-24">
       {hasMetamask && !isConnected && (
-        <button type="button" onClick={connect} disabled={isConnecting}>
+        <button
+          className="mb-9 rounded-3xl border-none bg-pistachio px-12 py-6 text-xl leading-none drop-shadow-connect-light dark:bg-dark-3 dark:drop-shadow-connect-dark"
+          type="button"
+          onClick={connect}
+          disabled={isConnecting}
+        >
           Connect to MetaMask wallet
         </button>
       )}
