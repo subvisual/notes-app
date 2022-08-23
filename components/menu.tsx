@@ -7,6 +7,7 @@ import TagsList from "./tags-list";
 import AddNote from "./add-note";
 import AddFolder from "./add-folder";
 import DeleteFolder from "./delete-folder";
+import SearchBar from "./search-bar";
 
 enum ModalActions {
   ADD_NOTE = "addNote",
@@ -34,7 +35,8 @@ export default function Menu() {
   const closeModal = () => setModalAction(ModalActions.NONE);
 
   return (
-    <div className="bg-slate-300 h-full flex flex-col justify-between w-1/5">
+    <div className="bg-slate-300 h-full flex flex-col justify-between items-center w-1/5">
+      <SearchBar />
       <Tabs className="grow">
         <TabList className="flex">
           <Tab>Folders</Tab>

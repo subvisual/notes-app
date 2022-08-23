@@ -1,14 +1,12 @@
 import Folder from "./folder";
-import { useStore } from "../lib/store";
+import useFilteredStore from "../lib/hooks/useFilteredStore";
 
 export default function FoldersList() {
-  const {
-    userFolders: { folders },
-  } = useStore();
+  const { filteredFolders } = useFilteredStore();
 
   return (
     <div>
-      {folders.map((folder) => (
+      {filteredFolders.map((folder) => (
         <Folder key={folder.id} folder={folder} />
       ))}
     </div>

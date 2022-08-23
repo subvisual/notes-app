@@ -49,6 +49,10 @@ type UseStore = {
     tags: string[];
     setTags: () => void;
   };
+  search: {
+    searchTerm: string;
+    setSearchTerm: (str: string) => void;
+  };
   session: {
     isConnected: boolean;
     setIsConnected: (bool: boolean) => void;
@@ -267,6 +271,15 @@ export const useStore = create<UseStore>()((set) => ({
           userTags: { ...state.userTags, tags },
         };
       }),
+  },
+
+  search: {
+    searchTerm: "",
+    setSearchTerm: (str: string) =>
+      set((state) => ({
+        ...state,
+        search: { ...state.search, searchTerm: str },
+      })),
   },
 
   session: {

@@ -1,14 +1,12 @@
 import Tag from "./tag";
-import { useStore } from "../lib/store";
+import useFilteredStore from "../lib/hooks/useFilteredStore";
 
 export default function TagsList() {
-  const {
-    userTags: { tags },
-  } = useStore();
+  const { filteredTags } = useFilteredStore();
 
   return (
     <div>
-      {tags.map((tag) => (
+      {filteredTags.map((tag) => (
         <Tag key={tag} tag={tag} />
       ))}
     </div>
