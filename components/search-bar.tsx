@@ -3,7 +3,7 @@ import { useStore } from "../lib/store";
 
 export default function SearchBar() {
   const {
-    search: { setSearchTerm, searchTerm },
+    search: { setSearchTerm },
   } = useStore();
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +25,6 @@ export default function SearchBar() {
       <input
         className="w-full bg-transparent"
         onChange={handleChange}
-        value={searchTerm}
         type="text"
       />
       <input className="m-0 border-none p-0" type="reset" value="&#x2715;" />
