@@ -1,14 +1,11 @@
 import { useState, useEffect, MouseEvent } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Modal from "react-modal";
 import FoldersList from "./folders-list";
 import { useStore } from "../lib/store";
 import TagsList from "./tags-list";
-import AddNote from "./add-note";
-import AddFolder from "./add-folder";
-import DeleteFolder from "./delete-folder";
 import SearchBar from "./search-bar";
 import Logo from "./logo";
+import Modal from "./modal";
 
 enum ModalActions {
   ADD_NOTE = "addNote",
@@ -78,21 +75,8 @@ export default function Menu() {
       >
         DELETE FOLDER
       </button>
-      <Modal
-        isOpen={!!modalAction}
-        className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
-        ariaHideApp={false}
-      >
-        {modalAction === ModalActions.ADD_NOTE && (
-          <AddNote closeModal={closeModal} />
-        )}
-        {modalAction === ModalActions.ADD_FOLDER && (
-          <AddFolder closeModal={closeModal} />
-        )}
-        {modalAction === ModalActions.DELETE_FOLDER && (
-          <DeleteFolder closeModal={closeModal} />
-        )}
-      </Modal>
+
+      <Modal type={modalAction} closeModal={closeModal} />
     </div>
   );
 }
