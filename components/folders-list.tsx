@@ -5,10 +5,10 @@ export default function FoldersList() {
   const { filteredFolders } = useFilteredStore();
 
   return (
-    <div>
+    <ul>
       {filteredFolders.map((folder) => (
         <Folder key={folder.id} folder={folder} />
       ))}
-    </div>
+    </ul>
   );
 }

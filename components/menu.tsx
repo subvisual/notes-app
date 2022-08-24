@@ -7,7 +7,7 @@ import SearchBar from "./search-bar";
 import Logo from "./logo";
 import Modal from "./modal";
 
-enum ModalActions {
+export enum ModalActions {
   ADD_NOTE = "addNote",
   ADD_FOLDER = "addFolder",
   DELETE_FOLDER = "deleteFolder",
@@ -33,50 +33,63 @@ export default function Menu() {
   const closeModal = () => setModalAction(ModalActions.NONE);
 
   return (
-    <div className="max-w-96 flex h-full w-1/4 min-w-max flex-col items-center justify-between bg-light-2 dark:bg-dark-3">
-      <div className="px-6 pt-7">
-        <Logo />
-        <SearchBar />
+    <>
+      <div className="max-w-96 text-md z-10 flex h-screen w-1/4 min-w-max flex-col items-center justify-between bg-light-2 shadow-[0_0px_15px_rgba(0,0,0,.3)] dark:bg-dark-3">
+        <div className="w-full p-5">
+          <Logo width="120" length="45" />
+          <SearchBar />
+        </div>
+        <Tabs className="w-full grow">
+          <TabList className="grid h-12 w-full grid-cols-[1fr_1fr] border-b-thin border-dark-4 text-center dark:border-light-4">
+            <Tab
+              className="flex w-full items-center justify-center"
+              selectedClassName="rounded-tr-lg dark:bg-dark-2 bg-light-3 border-t-thin border-r-thin border-dark-4 dark:border-light-4"
+            >
+              Folders
+            </Tab>
+            <Tab
+              className="flex w-full items-center justify-center"
+              selectedClassName="rounded-tl-lg dark:bg-dark-2 bg-light-3 border-t-thin border-l-thin border-dark-4 dark:border-light-4"
+            >
+              Tags
+            </Tab>
+          </TabList>
+
+          <TabPanel>
+            <FoldersList />
+          </TabPanel>
+          <TabPanel>
+            <TagsList />
+          </TabPanel>
+        </Tabs>
+        <div className="flex h-28 flex-col text-xs">
+          <button
+            type="button"
+            className="p-2"
+            onClick={changeModalAction}
+            value={ModalActions.ADD_NOTE}
+          >
+            ADD NOTE
+          </button>
+          <button
+            type="button"
+            className="p-2"
+            onClick={changeModalAction}
+            value={ModalActions.ADD_FOLDER}
+          >
+            ADD FOLDER
+          </button>
+          <button
+            type="button"
+            className="p-2"
+            onClick={changeModalAction}
+            value={ModalActions.DELETE_FOLDER}
+          >
+            DELETE FOLDER
+          </button>
+        </div>
       </div>
-      <Tabs className="grow">
-        <TabList className="flex">
-          <Tab>Folders</Tab>
-          <Tab>Tags</Tab>
-        </TabList>
-
-        <TabPanel className="p-0">
-          <FoldersList />
-        </TabPanel>
-        <TabPanel className="p-0">
-          <TagsList />
-        </TabPanel>
-      </Tabs>
-      <button
-        type="button"
-        className="p-2"
-        onClick={changeModalAction}
-        value={ModalActions.ADD_NOTE}
-      >
-        ADD NOTE
-      </button>
-      <button
-        type="button"
-        className="p-2"
-        onClick={changeModalAction}
-        value={ModalActions.ADD_FOLDER}
-      >
-        ADD FOLDER
-      </button>
-      <button
-        type="button"
-        className="p-2"
-        onClick={changeModalAction}
-        value={ModalActions.DELETE_FOLDER}
-      >
-        DELETE FOLDER
-      </button>
-
       <Modal type={modalAction} closeModal={closeModal} />
-    </div>
+    </>
   );
 }

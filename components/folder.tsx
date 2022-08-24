@@ -29,11 +29,19 @@ export default function Folder({ folder }: FolderProps) {
   const toggleNotes = () => setShowNotes(!showNotes);
 
   return (
-    <div className="folder-container">
-      <button type="button" onClick={toggleNotes}>
+    <li
+      className={`border-b-thin border-dark-4 dark:border-light-4 ${
+        showNotes && "bg-light-3 dark:bg-dark-2"
+      }`}
+    >
+      <button
+        className="w-full py-4 pl-11 pr-3 text-left"
+        type="button"
+        onClick={toggleNotes}
+      >
         {folder.name}
       </button>
       {showNotes && <NotesList notes={notes} />}
-    </div>
+    </li>
   );
 }

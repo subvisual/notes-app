@@ -17,17 +17,21 @@ export default function NotesList({ notes }: NotesListProps) {
   };
 
   return (
-    <div className="flex flex-col">
+    <ul className="flex flex-col">
       {notes.map((note) => (
-        <button
-          type="button"
-          className={note.id === openNote?.id ? "bg-blue-500" : ""}
-          key={note.id}
-          onClick={() => handleClick(note)}
-        >
-          {note.name}
-        </button>
+        <li>
+          <button
+            type="button"
+            className={`w-full py-3 pl-16 pr-3 text-left  ${
+              note.id === openNote?.id && "bg-pistachio dark:bg-dark-1"
+            }`}
+            key={note.id}
+            onClick={() => handleClick(note)}
+          >
+            {note.name}
+          </button>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
