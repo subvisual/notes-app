@@ -64,19 +64,19 @@ export default function NoteEditor() {
     setOpenNote(null);
   };
 
-  const nameChangeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setName(ev.target.value);
 
     if (!updateName) setUpdateName(true);
   };
 
-  const contentChangeHandler = (ev: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleContentChange = (ev: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(ev.target.value);
 
     if (!updateContent) setUpdateContent(true);
   };
 
-  const tagChangeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
+  const handleTagChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setTags(ev.target.value);
 
     if (!updateTags) setUpdateTags(true);
@@ -103,7 +103,7 @@ export default function NoteEditor() {
             <NoteTags
               tags={tags}
               editMode={editTags}
-              handleChangeTags={tagChangeHandler}
+              handleChangeTags={handleTagChange}
             />
             <button
               className={`${editTags && "bg-pistachio dark:bg-dark-1"} p-2`}
@@ -137,13 +137,13 @@ export default function NoteEditor() {
           <div className="bg:light-1 h-full w-full pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input
               className="mx-auto block w-[calc(100%-10rem)] border-b-thin bg-transparent text-3xl outline-none"
-              onChange={nameChangeHandler}
+              onChange={handleNameChange}
               readOnly={!editNote}
               value={name}
             />
             <textarea
               className="mt-7 block h-full w-full resize-none overflow-y-scroll bg-transparent px-20 pb-10 outline-none"
-              onChange={contentChangeHandler}
+              onChange={handleContentChange}
               readOnly={!editNote}
               value={content}
             />
