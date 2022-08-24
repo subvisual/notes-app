@@ -19,13 +19,12 @@ export default function NotesList({ notes }: NotesListProps) {
   return (
     <ul className="flex flex-col">
       {notes.map((note) => (
-        <li>
+        <li key={note.id}>
           <button
             type="button"
             className={`w-full py-3 pl-16 pr-3 text-left  ${
               note.id === openNote?.id && "bg-pistachio dark:bg-dark-1"
             }`}
-            key={note.id}
             onClick={() => handleClick(note)}
           >
             {note.name}

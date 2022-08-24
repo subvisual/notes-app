@@ -98,15 +98,15 @@ export default function NoteEditor() {
   return (
     <div className="w-4/5">
       {openNote && (
-        <div className="flex flex-col">
-          <div className="bg-slate-300 flex justify-between">
+        <div className="flex h-full flex-col">
+          <div className="flex h-[4.2rem] content-center justify-between gap-1 bg-light-2 px-3 dark:bg-dark-3">
             <NoteTags
               tags={tags}
               editMode={editTags}
               handleChangeTags={tagChangeHandler}
             />
             <button
-              className={`${editTags && "bg-blue-400"} p-2`}
+              className={`${editTags && "bg-pistachio dark:bg-dark-1"} p-2`}
               type="button"
               onClick={toggleEditTags}
             >
@@ -114,27 +114,35 @@ export default function NoteEditor() {
             </button>
             <button
               type="button"
-              className={`${editNote && "bg-blue-400"} p-2`}
+              className={`${editNote && "bg-pistachio dark:bg-dark-1"} p-2`}
               onClick={toggleEditNote}
             >
               edit
             </button>
-            <button type="button" onClick={deleteNote}>
+            <button
+              type="button"
+              className="p-2 active:bg-pistachio dark:active:bg-dark-1"
+              onClick={deleteNote}
+            >
               delete
             </button>
-            <button type="button" className="p-2" onClick={saveNote}>
+            <button
+              type="button"
+              className="p-2 active:bg-pistachio dark:active:bg-dark-1"
+              onClick={saveNote}
+            >
               save
             </button>
           </div>
-          <div className="flex flex-col">
+          <div className="bg:light-1 h-full w-full pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input
-              className="border"
+              className="mx-auto block w-[calc(100%-10rem)] border-b-thin bg-transparent text-3xl outline-none"
               onChange={nameChangeHandler}
               readOnly={!editNote}
               value={name}
             />
             <textarea
-              className="border"
+              className="mt-7 block h-full w-full resize-none overflow-y-scroll bg-transparent px-20 pb-10 outline-none"
               onChange={contentChangeHandler}
               readOnly={!editNote}
               value={content}

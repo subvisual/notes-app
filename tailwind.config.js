@@ -24,6 +24,9 @@ module.exports = {
         "connect-dark": "0 0 4px rgba(255, 255, 253, 0.25)",
         "connect-light": "0 0 4px rgba(44, 45, 54, 0.25)",
       },
+      boxShadow: {
+        "input-light": "0 0 15px -5px rgba(0,0,0,.25)",
+      },
       fontFamily: {
         studio: ["Studio Feixen Sans", "sans-serif"],
       },

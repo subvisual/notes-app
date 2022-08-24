@@ -20,7 +20,7 @@ export default function SearchBar() {
     <form
       onReset={reset}
       onSubmit={handleSubmit}
-      className="mt-4 flex w-full justify-between rounded-full bg-light-1 px-2 text-dark-1 shadow-[0_0px_15px_-5px_rgba(0,0,0,.25)] dark:bg-light-4 dark:shadow-none"
+      className="mt-4 flex w-full justify-between rounded-full bg-light-1 px-2 text-dark-1 shadow-input-light dark:bg-light-4 dark:shadow-none"
     >
       <input
         className="w-full bg-transparent outline-none"
