@@ -2,7 +2,13 @@ import ReactModal from "react-modal";
 import AddNote from "./add-note";
 import AddFolder from "./add-folder";
 import DeleteFolder from "./delete-folder";
-import { ModalActions } from "./menu";
+
+export enum ModalActions {
+  ADD_NOTE = "addNote",
+  ADD_FOLDER = "addFolder",
+  DELETE_FOLDER = "deleteFolder",
+  NONE = "",
+}
 
 type ModalProps = {
   type: ModalActions;

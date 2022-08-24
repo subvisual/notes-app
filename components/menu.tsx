@@ -5,14 +5,7 @@ import { useStore } from "../lib/store";
 import TagsList from "./tags-list";
 import SearchBar from "./search-bar";
 import Logo from "./logo";
-import Modal from "./modal";
-
-export enum ModalActions {
-  ADD_NOTE = "addNote",
-  ADD_FOLDER = "addFolder",
-  DELETE_FOLDER = "deleteFolder",
-  NONE = "",
-}
+import Modal, { ModalActions } from "./modal";
 
 export default function Menu() {
   const {
