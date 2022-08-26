@@ -3,7 +3,7 @@ import { useStore } from "../lib/store";
 
 export default function SearchBar() {
   const {
-    search: { setSearchTerm },
+    search: { setSearchTerm, searchTerm },
   } = useStore();
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {

@@ -34,3 +34,9 @@ a {
   margin: 0;
   padding: 0;
 }
+
+.ReactModal__Overlay {
+  background-color: rgba(29, 30, 36, 0.9) !important;
+  backdrop-filter: blur(3px);
+  z-index: 20;
+}

@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, FormEvent } from "react";
+import FormButton from "./form-button";
 import { useStore } from "../lib/store";
 
 type AddFolderProps = {
@@ -25,10 +26,10 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
 
   return (
     <>
-      <h2 className="text-center">Add folder</h2>
+      <h2 className="self-center text-center text-lg">Add folder</h2>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col text-center items-center"
+        className="grid h-full grid-rows-[2fr,_1fr] items-start text-center"
       >
         <label htmlFor="new-folder-name">
           Folder:
@@ -36,15 +37,16 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
             id="new-folder-name"
             value={folderName}
             onChange={handleNameChange}
+            className="ml-4 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1  outline-none"
           />
         </label>
-        <div className="flex justify-around">
-          <button type="button" className="p-2" onClick={closeModal}>
+        <div className="flex justify-center gap-9">
+          <FormButton variant="secondary" type="button" onClick={closeModal}>
             cancel
-          </button>
-          <button type="submit" className="p-2">
+          </FormButton>
+          <FormButton variant="primary" type="submit">
             save
-          </button>
+          </FormButton>
         </div>
       </form>
     </>

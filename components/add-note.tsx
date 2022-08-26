@@ -1,6 +1,7 @@
 import { ChangeEvent, useState, FormEvent } from "react";
-import { useStore } from "../lib/store";
+import FormButton from "./form-button";
 import slugify from "../lib/utils/slugify";
+import { useStore } from "../lib/store";
 
 type AddNoteProps = {
   closeModal: () => void;
@@ -48,44 +49,48 @@ export default function AddNote({ closeModal }: AddNoteProps) {
 
   return (
     <>
-      <h2 className="text-center">Add note</h2>
+      <h2 className="self-center text-center text-lg">Add note</h2>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col text-center items-center"
+        className="grid h-full grid-rows-[2fr,_1fr] items-start text-center"
       >
-        <label htmlFor="new-note-name">
-          Name:
-          <input
-            id="new-note-name"
-            value={noteName}
-            onChange={handleNameChange}
-          />
-        </label>
-        <label htmlFor="new-note-folder">
-          Folder:
-          <select
-            id="new-note-folder"
-            required
-            value={folderId}
-            onChange={handleFolderChange}
-          >
-            <option disabled value="">
-              Choose a folder
-            </option>
-            {folders.map((folder) => (
-              <option key={folder.id} value={folder.id}>
-                {folder.name}
+        <div className="flex flex-col gap-6">
+          <label htmlFor="new-note-name">
+            Name:
+            <input
+              id="new-note-name"
+              value={noteName}
+              onChange={handleNameChange}
+              className="ml-4 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1  outline-none"
+            />
+          </label>
+          <label htmlFor="new-note-folder">
+            Folder:
+            <select
+              id="new-note-folder"
+              required
+              value={folderId}
+              onChange={handleFolderChange}
+              className="ml-4 rounded-md border-thin border-inherit bg-light-1 px-2  py-1 text-dark-1"
+            >
+              <option disabled value="">
+                Choose a folder
               </option>
-            ))}
-          </select>
-        </label>
-        <div className="flex justify-around">
-          <button type="button" className="p-2" onClick={closeModal}>
+              {folders.map((folder) => (
+                <option key={folder.id} value={folder.id}>
+                  {folder.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="flex justify-center gap-9">
+          <FormButton variant="secondary" type="button" onClick={closeModal}>
             cancel
-          </button>
-          <button type="submit" className="p-2">
+          </FormButton>
+          <FormButton variant="primary" type="submit">
             save
-          </button>
+          </FormButton>
         </div>
       </form>
     </>
