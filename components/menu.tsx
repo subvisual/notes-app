@@ -23,8 +23,8 @@ export default function Menu() {
 
   return (
     <>
-      <div className="max-w-96 text-md z-10 flex h-screen w-1/4 min-w-max flex-col items-center justify-between bg-light-2 shadow-[0_0px_15px_rgba(0,0,0,.3)] dark:bg-dark-3">
-        <div className="w-full p-5">
+      <div className="text-md z-10 grid h-screen w-full grid-rows-[7.8rem,_1fr,_5.8rem] bg-light-2 shadow-[0_0px_15px_rgba(0,0,0,.3)] dark:bg-dark-3">
+        <div className="h-full w-full p-5">
           <Logo width="120" length="45" />
           <SearchBar />
         </div>

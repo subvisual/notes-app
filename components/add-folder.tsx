@@ -37,7 +37,8 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
             id="new-folder-name"
             value={folderName}
             onChange={handleNameChange}
-            className="ml-4 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1  outline-none"
+            maxLength={40}
+            className="ml-4 w-1/2 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1  outline-none"
           />
         </label>
         <div className="flex justify-center gap-9">

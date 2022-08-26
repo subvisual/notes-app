@@ -61,7 +61,11 @@ export default function MenuActions({ setModalAction }: MenuActionsProps) {
           </button>
         </div>
       </div>
-      <button type="button" className="p-2" onClick={handleDeleteClick}>
+      <button
+        type="button"
+        className="whitespace-nowrap p-2"
+        onClick={handleDeleteClick}
+      >
         DELETE FOLDER
       </button>
     </div>

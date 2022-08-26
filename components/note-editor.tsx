@@ -96,15 +96,16 @@ export default function NoteEditor() {
   };
 
   return (
-    <div className="w-4/5">
+    <div className="w-full">
       {openNote && (
         <div className="flex h-full flex-col">
-          <div className="flex h-[4.2rem] content-center justify-between gap-1 bg-light-2 px-3 dark:bg-dark-3">
+          <div className="grid h-[4.5rem] grid-cols-[1fr,_auto] gap-3 bg-light-2 px-3 dark:bg-dark-3">
             <NoteTags
               tags={tags}
               editMode={editTags}
               handleChangeTags={handleTagChange}
             />
+            <div className="flex gap-1">
             <button
               className={`${
                 editTags &&
@@ -139,6 +140,7 @@ export default function NoteEditor() {
             >
               save
             </button>
+            </div>
           </div>
           <div className="bg:light-1 h-full w-full pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input

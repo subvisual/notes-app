@@ -35,7 +35,7 @@ export default function Folder({ folder }: FolderProps) {
       }`}
     >
       <button
-        className="w-full py-4 pl-11 pr-3 text-left"
+        className="w-full overflow-scroll whitespace-nowrap py-4 pl-11 pr-3 text-left"
         type="button"
         onClick={toggleNotes}
       >

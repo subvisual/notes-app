@@ -22,7 +22,7 @@ export default function NotesList({ notes }: NotesListProps) {
         <li key={note.id}>
           <button
             type="button"
-            className={`w-full py-3 pl-16 pr-3 text-left  ${
+            className={`w-full overflow-scroll whitespace-nowrap py-3 pl-16 pr-3 text-left  ${
               note.id === openNote?.id &&
               "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
             }`}

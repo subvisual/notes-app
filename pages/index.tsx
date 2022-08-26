@@ -23,14 +23,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex h-full bg-light-1 font-studio font-light text-dark-1 dark:bg-dark-1 dark:text-light-2">
+      <main className="h-full bg-light-1 font-studio font-light text-dark-1 dark:bg-dark-1 dark:text-light-2">
         {isConnected ? (
-          <>
+          <div className="grid grid-cols-[20rem,_1fr]">
             <Menu />
             <NoteEditor />
-          </>
+          </div>
         ) : (
-          <div className="mx-auto mt-44 text-center">
+          <div className="mx-auto pt-44 text-center">
             <Logo />
             <Connect />
           </div>

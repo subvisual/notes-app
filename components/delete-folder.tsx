@@ -39,7 +39,7 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
             required
             value={folderId}
             onChange={handleFolderChange}
-            className="ml-4 rounded-md border-thin border-inherit bg-light-1 px-2  py-1 text-dark-1"
+            className="ml-4 w-1/2 rounded-md border-thin border-inherit bg-light-1 px-2  py-1 text-dark-1"
           >
             <option disabled value="">
               Choose a folder
