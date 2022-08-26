@@ -106,7 +106,10 @@ export default function NoteEditor() {
               handleChangeTags={handleTagChange}
             />
             <button
-              className={`${editTags && "bg-pistachio dark:bg-dark-1"} p-2`}
+              className={`${
+                editTags &&
+                "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
+              } p-2`}
               type="button"
               onClick={toggleEditTags}
             >
@@ -114,21 +117,24 @@ export default function NoteEditor() {
             </button>
             <button
               type="button"
-              className={`${editNote && "bg-pistachio dark:bg-dark-1"} p-2`}
+              className={`${
+                editNote &&
+                "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
+              } p-2`}
               onClick={toggleEditNote}
             >
               edit
             </button>
             <button
               type="button"
-              className="p-2 active:bg-pistachio dark:active:bg-dark-1"
+              className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
               onClick={deleteNote}
             >
               delete
             </button>
             <button
               type="button"
-              className="p-2 active:bg-pistachio dark:active:bg-dark-1"
+              className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
               onClick={saveNote}
             >
               save

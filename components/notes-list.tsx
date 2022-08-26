@@ -23,7 +23,8 @@ export default function NotesList({ notes }: NotesListProps) {
           <button
             type="button"
             className={`w-full py-3 pl-16 pr-3 text-left  ${
-              note.id === openNote?.id && "bg-pistachio dark:bg-dark-1"
+              note.id === openNote?.id &&
+              "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
             }`}
             onClick={() => handleClick(note)}
           >
