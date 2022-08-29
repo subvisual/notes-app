@@ -2,6 +2,8 @@ import { useState, useMemo } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
 import splitTags from "../lib/utils/split-tags";
+import ChevronSVG from "../assets/chevron.svg";
+import HashtagSVG from "../assets/hashtag.svg";
 
 type TagProps = {
   tag: string;
@@ -35,11 +37,17 @@ export default function Tag({ tag }: TagProps) {
       }`}
     >
       <button
-        className="w-full overflow-scroll whitespace-nowrap py-4 pl-11 pr-3 text-left"
+        className="grid w-full grid-cols-[20px,_1fr,_20px] items-center gap-4 py-4 px-3 pl-7"
         type="button"
         onClick={toggleNotes}
       >
-        {tag}
+        <HashtagSVG className="h-5 w-5 stroke-current stroke-[1.5]" />
+        <span className="w-full overflow-x-scroll whitespace-nowrap text-left">
+          {tag}
+        </span>
+        <ChevronSVG
+          className={`h-5 w-5 fill-current ${showNotes && "rotate-180"}`}
+        />
       </button>
       {showNotes && <NotesList notes={notes} />}
     </li>

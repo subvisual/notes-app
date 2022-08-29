@@ -2,6 +2,10 @@ import { useState, useEffect, ChangeEvent } from "react";
 import NoteTags from "./note-tags";
 import { useStore } from "../lib/store";
 import slugify from "../lib/utils/slugify";
+import EditSVG from "../assets/edit.svg";
+import TagsSVG from "../assets/tags.svg";
+import TrashSVG from "../assets/trash.svg";
+import SaveSVG from "../assets/save.svg";
 
 export default function NoteEditor() {
   const {
@@ -106,40 +110,40 @@ export default function NoteEditor() {
               handleChangeTags={handleTagChange}
             />
             <div className="flex gap-1">
-            <button
-              className={`${
-                editTags &&
-                "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
-              } p-2`}
-              type="button"
-              onClick={toggleEditTags}
-            >
-              tags
-            </button>
-            <button
-              type="button"
-              className={`${
-                editNote &&
-                "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
-              } p-2`}
-              onClick={toggleEditNote}
-            >
-              edit
-            </button>
-            <button
-              type="button"
-              className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
-              onClick={deleteNote}
-            >
-              delete
-            </button>
-            <button
-              type="button"
-              className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
-              onClick={saveNote}
-            >
-              save
-            </button>
+              <button
+                className={`${
+                  editTags &&
+                  "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
+                } p-2`}
+                type="button"
+                onClick={toggleEditTags}
+              >
+                <TagsSVG className="h-6 w-6 fill-current" />
+              </button>
+              <button
+                type="button"
+                className={`${
+                  editNote &&
+                  "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
+                } p-2`}
+                onClick={toggleEditNote}
+              >
+                <EditSVG className="h-6 w-6 stroke-current stroke-[1.5]" />
+              </button>
+              <button
+                type="button"
+                className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
+                onClick={deleteNote}
+              >
+                <TrashSVG className="h-7 w-7 stroke-current stroke-2" />
+              </button>
+              <button
+                type="button"
+                className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
+                onClick={saveNote}
+              >
+                <SaveSVG className="h-7 w-7 fill-current" />
+              </button>
             </div>
           </div>
           <div className="bg:light-1 h-full w-full pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">

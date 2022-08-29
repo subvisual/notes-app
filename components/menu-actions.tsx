@@ -1,5 +1,6 @@
 import { useState, createRef, useEffect } from "react";
 import { ModalActions } from "./modal";
+import TrashSVG from "../assets/trash.svg";
 
 type MenuActionsProps = {
   setModalAction: (action: ModalActions) => void;
@@ -61,12 +62,8 @@ export default function MenuActions({ setModalAction }: MenuActionsProps) {
           </button>
         </div>
       </div>
-      <button
-        type="button"
-        className="whitespace-nowrap p-2"
-        onClick={handleDeleteClick}
-      >
-        DELETE FOLDER
+      <button type="button" className="p-2" onClick={handleDeleteClick}>
+        <TrashSVG className="h-10 w-10 stroke-dark-1 stroke-2 dark:stroke-light-1" />
       </button>
     </div>
   );
