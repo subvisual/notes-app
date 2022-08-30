@@ -9,7 +9,7 @@ export default function Connect() {
   const [hasMetamask, setHasMetamask] = useState<boolean>();
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const {
-    user: { setUserSig, setSignedKey },
+    user: { setUserSig, setSignedKey, userSig, signedKey },
     userNotes: { getAllNotes },
     userFolders: { getFolders },
     session: { isConnected, setIsConnected },
@@ -29,57 +29,63 @@ export default function Connect() {
   const connect = async () => {
     if (!window.ethereum) return;
 
-    try {
-      setIsConnecting(true);
-      setAuthState("Connecting to your wallet...");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-
-      setAuthState("Please sign the message...");
-      const userSignature = await signer.signMessage(
-        `Hi, please sign this message: ${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
-      );
-      let key = "";
-
-      try {
-        const res = await axios.get(`users?userSig=${userSignature}`);
-
-        key = res?.data.userData.key;
-      } catch (err: any) {
-        if (err.data.message === "User not found") {
-          key = uuidv4();
-          await axios.post("users", {
-            userSig: userSignature,
-            key,
-          });
-        } else {
-          throw err;
-        }
-      }
-
-      const signedKey = await signer.signMessage(key);
-
-      if (!signedKey || !userSignature) {
-        throw new Error("Missing user information");
-      }
-
-      setUserSig(userSignature);
-      setSignedKey(signedKey);
-      setIsConnecting(false);
-      setAuthState("Connected");
+    if (userSig && signedKey) {
+      getAllNotes(userSig, signedKey);
+      getFolders(userSig, signedKey);
       setIsConnected(true);
-      getAllNotes(userSignature, signedKey);
-      getFolders(userSignature, signedKey);
-    } catch (err: any) {
-      if (err.code === 4001) {
-        setAuthState("");
-      } else {
-        setAuthState("An error occurred. Please try again.");
-      }
+    } else {
+      try {
+        setIsConnecting(true);
+        setAuthState("Connecting to your wallet...");
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-      setIsConnecting(false);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+
+        setAuthState("Please sign the message...");
+        const userSignature = await signer.signMessage(
+          `Hi, please sign this message: ${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
+        );
+        let key = "";
+
+        try {
+          const res = await axios.get(`users?userSig=${userSignature}`);
+
+          key = res?.data.userData.key;
+        } catch (err: any) {
+          if (err.data.message === "User not found") {
+            key = uuidv4();
+            await axios.post("users", {
+              userSig: userSignature,
+              key,
+            });
+          } else {
+            throw err;
+          }
+        }
+
+        const sigKey = await signer.signMessage(key);
+
+        if (!sigKey || !userSignature) {
+          throw new Error("Missing user information");
+        }
+
+        setUserSig(userSignature);
+        setSignedKey(sigKey);
+        setIsConnecting(false);
+        setAuthState("Connected");
+        setIsConnected(true);
+        getAllNotes(userSignature, sigKey);
+        getFolders(userSignature, sigKey);
+      } catch (err: any) {
+        if (err.code === 4001) {
+          setAuthState("");
+        } else {
+          setAuthState("An error occurred. Please try again.");
+        }
+
+        setIsConnecting(false);
+      }
     }
   };
 

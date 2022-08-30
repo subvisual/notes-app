@@ -31,7 +31,11 @@ export default function Home() {
               </a>
             </Link>
             <div className="mx-auto mt-24">
-              <Logo />
+              <Link href="/">
+                <a>
+                  <Logo />
+                </a>
+              </Link>
               <Connect />
             </div>
           </div>
