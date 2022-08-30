@@ -111,17 +111,19 @@ export default function NoteEditor() {
             />
             <div className="flex gap-1">
               <button
+                type="button"
+                title="Edit tags"
                 className={`${
                   editTags &&
                   "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
                 } p-2`}
-                type="button"
                 onClick={toggleEditTags}
               >
                 <TagsSVG className="h-6 w-6 fill-current" />
               </button>
               <button
                 type="button"
+                title="Edit note"
                 className={`${
                   editNote &&
                   "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
@@ -132,6 +134,7 @@ export default function NoteEditor() {
               </button>
               <button
                 type="button"
+                title="Delete note"
                 className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
                 onClick={deleteNote}
               >
@@ -139,6 +142,7 @@ export default function NoteEditor() {
               </button>
               <button
                 type="button"
+                title="Save changes"
                 className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
                 onClick={saveNote}
               >

@@ -37,6 +37,7 @@ export default function MenuActions({ setModalAction }: MenuActionsProps) {
       <div className="relative" ref={ref}>
         <button
           type="button"
+          title="Create note or folder"
           className="relative z-20 flex h-12 w-12 items-center justify-center rounded-full bg-green pb-1 text-4xl leading-none text-light-1 dark:bg-dark-1"
           onClick={toggleOptions}
         >
@@ -62,7 +63,12 @@ export default function MenuActions({ setModalAction }: MenuActionsProps) {
           </button>
         </div>
       </div>
-      <button type="button" className="p-2" onClick={handleDeleteClick}>
+      <button
+        type="button"
+        title="Delete folder"
+        className="p-2"
+        onClick={handleDeleteClick}
+      >
         <TrashSVG className="h-10 w-10 stroke-dark-1 stroke-2 dark:stroke-light-1" />
       </button>
     </div>
