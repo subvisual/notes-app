@@ -30,7 +30,7 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
     );
 
     if (folder) {
-      setStatus("loading", "Creating folder...");
+      setStatus("ok", "Created folder");
     } else {
       setStatus("error", "Something went wrong");
     }

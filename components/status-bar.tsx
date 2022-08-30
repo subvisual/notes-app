@@ -7,15 +7,12 @@ import LoaderSVG from "../assets/loader.svg";
 const DELAY = 2000;
 
 export default function StatusBar() {
+  const [visible, setVisible] = useState(false);
   const timeout = useRef<ReturnType<typeof setTimeout>>();
 
   const {
     session: { status, statusMessage, setStatus },
   } = useStore();
-
-  const [tempStatus, setTempStatus] = useState<typeof status>("idle");
-  const [tempStatusMessage, setTempStatusMessage] =
-    useState<typeof statusMessage>("");
 
   function clear() {
     if (timeout.current) {
@@ -27,12 +24,11 @@ export default function StatusBar() {
     clear();
 
     if (status !== "idle") {
-      setTempStatus(status);
-      setTempStatusMessage(statusMessage);
+      setVisible(true);
     }
 
     timeout.current = setTimeout(() => {
-      setStatus("idle", "");
+      setVisible(false);
     }, DELAY);
 
     return () => clear();
@@ -52,10 +48,10 @@ export default function StatusBar() {
   return (
     <div
       className="absolute right-8 bottom-8 flex items-center rounded bg-light-3 px-4 py-3 text-dark-2 transition-opacity dark:bg-light-2 dark:text-dark-3"
-      style={{ opacity: status === "idle" ? 0 : 1 }}
+      style={{ opacity: visible ? 1 : 0 }}
     >
-      {StatusIcon[tempStatus]}
-      <p className="ml-2">{tempStatusMessage}</p>
+      {StatusIcon[status]}
+      <p className="ml-2">{statusMessage}</p>
     </div>
   );
 }
