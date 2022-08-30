@@ -13,6 +13,7 @@ export default function ThemeButton() {
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
       className="h-8 w-8 overflow-hidden rounded-md bg-light-1 drop-shadow-connect-light  dark:bg-dark-1 dark:shadow-none"
     >
