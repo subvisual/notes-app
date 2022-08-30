@@ -9,6 +9,8 @@ export enum Theme {
   Dark = "dark",
 }
 
+type SessionStatus = "loading" | "error" | "ok" | "idle";
+
 type UseStore = {
   user: {
     userSig: string;
@@ -27,13 +29,13 @@ type UseStore = {
         user: string;
       },
       signedKey: string,
-    ) => Promise<NoteType | null>;
-    removeNote: (id: string) => void;
+    ) => Promise<NoteType | false>;
+    removeNote: (id: string) => Promise<boolean>;
     updateNote: (
       id: string,
       params: Record<string, string>,
       signedKey: string,
-    ) => void;
+    ) => Promise<boolean>;
   };
   userFolders: {
     folders: FolderType[];
@@ -58,9 +60,9 @@ type UseStore = {
     setIsConnected: (bool: boolean) => void;
     openNote: NoteType | null;
     setOpenNote: (note: NoteType | null) => void;
-    isLoading: boolean;
-    loadingMessage: string;
-    setLoading: (loading: boolean, message: string) => void;
+    status: SessionStatus;
+    statusMessage: string;
+    setStatus: (status: SessionStatus, message?: string) => void;
   };
   preferences: {
     theme: Theme;
@@ -108,7 +110,7 @@ export const useStore = create<UseStore>()((set) => ({
         user: string;
       },
       signedKey: string,
-    ): Promise<NoteType | null> => {
+    ): Promise<NoteType | false> => {
       const encryptedNote = {
         ...params,
         name: encryptData(params.name, signedKey),
@@ -116,7 +118,9 @@ export const useStore = create<UseStore>()((set) => ({
       };
       const res = await axios.post("notes", encryptedNote);
 
-      if (res.status !== 200) return null;
+      if (res.status !== 200) {
+        return false;
+      }
 
       const decryptedNote = { ...res.data.note, ...params };
 
@@ -133,7 +137,9 @@ export const useStore = create<UseStore>()((set) => ({
     removeNote: async (id: string) => {
       const res = await axios.delete(`notes?id=${id}`);
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) {
+        return false;
+      }
 
       set((state) => ({
         ...state,
@@ -142,6 +148,8 @@ export const useStore = create<UseStore>()((set) => ({
           allNotes: state.userNotes.allNotes.filter((note) => note.id !== id),
         },
       }));
+
+      return true;
     },
     updateNote: async (
       id: string,
@@ -161,7 +169,9 @@ export const useStore = create<UseStore>()((set) => ({
       };
       const res = await axios.put(`notes?id=${id}`, encryptedNote);
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) {
+        return false;
+      }
 
       set((state) => ({
         ...state,
@@ -172,6 +182,8 @@ export const useStore = create<UseStore>()((set) => ({
           ),
         },
       }));
+
+      return true;
     },
   },
 
@@ -298,15 +310,15 @@ export const useStore = create<UseStore>()((set) => ({
         ...state,
         session: { ...state.session, openNote: note },
       })),
-    isLoading: false,
-    loadingMessage: "",
-    setLoading: (loading: boolean, message: string) =>
+    status: "ok",
+    statusMessage: "",
+    setStatus: (status: SessionStatus, message?: string) =>
       set((state) => ({
         ...state,
         session: {
           ...state.session,
-          isLoading: loading,
-          loadingMessage: message,
+          status,
+          statusMessage: message || "",
         },
       })),
   },

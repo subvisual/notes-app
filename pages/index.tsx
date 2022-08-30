@@ -1,20 +1,27 @@
 import Head from "next/head";
-import Link from "next/link";
 import Connect from "../components/connect";
 import Menu from "../components/menu";
 import NoteEditor from "../components/note-editor";
 import Logo from "../components/logo";
-import { useStore } from "../lib/store";
+import { Theme, useStore } from "../lib/store";
+import StatusBar from "../components/status-bar";
 
 export default function Home() {
   const {
     session: { isConnected },
+    preferences: { theme },
   } = useStore();
 
   return (
-    <>
+    <div
+      className={`h-full antialiased ${
+        theme === Theme.Dark ? "dark" : "light"
+      }`}
+    >
       <Head>
         <title>Notes App</title>
+        <meta name="description" content="secure notes app" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="h-full bg-light-1 font-studio font-light text-dark-1 dark:bg-dark-1 dark:text-light-2">
@@ -24,23 +31,13 @@ export default function Home() {
             <NoteEditor />
           </div>
         ) : (
-          <div className="flex flex-col text-center">
-            <Link href="/about">
-              <a className="self-end p-6 text-dark-3 hover:text-green dark:text-light-3 hover:dark:text-pistachio">
-                About
-              </a>
-            </Link>
-            <div className="mx-auto mt-24">
-              <Link href="/">
-                <a>
-                  <Logo />
-                </a>
-              </Link>
-              <Connect />
-            </div>
+          <div className="mx-auto pt-44 text-center">
+            <Logo />
+            <Connect />
           </div>
         )}
+        <StatusBar />
       </main>
-    </>
+    </div>
   );
 }
