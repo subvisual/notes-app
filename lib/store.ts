@@ -58,6 +58,9 @@ type UseStore = {
     setIsConnected: (bool: boolean) => void;
     openNote: NoteType | null;
     setOpenNote: (note: NoteType | null) => void;
+    isLoading: boolean;
+    loadingMessage: string;
+    setLoading: (loading: boolean, message: string) => void;
   };
   preferences: {
     theme: Theme;
@@ -294,6 +297,17 @@ export const useStore = create<UseStore>()((set) => ({
       set((state) => ({
         ...state,
         session: { ...state.session, openNote: note },
+      })),
+    isLoading: false,
+    loadingMessage: "",
+    setLoading: (loading: boolean, message: string) =>
+      set((state) => ({
+        ...state,
+        session: {
+          ...state.session,
+          isLoading: loading,
+          loadingMessage: message,
+        },
       })),
   },
 
