@@ -310,7 +310,7 @@ export const useStore = create<UseStore>()((set) => ({
         ...state,
         session: { ...state.session, openNote: note },
       })),
-    status: "ok",
+    status: "idle",
     statusMessage: "",
     setStatus: (status: SessionStatus, message?: string) =>
       set((state) => ({
