@@ -43,9 +43,13 @@ type UseStore = {
     addFolder: (
       params: { name: string; user: string },
       signedKey: string,
-    ) => void;
-    removeFolder: (id: string) => void;
-    updateFolder: (id: string, name: string, signedKey: string) => void;
+    ) => Promise<boolean>;
+    removeFolder: (id: string) => Promise<boolean>;
+    updateFolder: (
+      id: string,
+      name: string,
+      signedKey: string,
+    ) => Promise<boolean>;
   };
   userTags: {
     tags: string[];
@@ -216,7 +220,9 @@ export const useStore = create<UseStore>()((set) => ({
       };
       const res = await axios.post("folders", encryptedNote);
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) {
+        return false;
+      }
 
       set((state) => ({
         ...state,
@@ -228,11 +234,15 @@ export const useStore = create<UseStore>()((set) => ({
           ],
         },
       }));
+
+      return true;
     },
     removeFolder: async (id: string) => {
       const res = await axios.delete(`folders?id=${id}`);
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) {
+        return false;
+      }
 
       set((state) => ({
         ...state,
@@ -243,13 +253,17 @@ export const useStore = create<UseStore>()((set) => ({
           ),
         },
       }));
+
+      return true;
     },
     updateFolder: async (id: string, name: string, signedKey: string) => {
       const res = await axios.put(`folders?id=${id}`, {
         name: encryptData(name, signedKey),
       });
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) {
+        return false;
+      }
 
       set((state) => ({
         ...state,
@@ -260,6 +274,8 @@ export const useStore = create<UseStore>()((set) => ({
           ),
         },
       }));
+
+      return true;
     },
   },
 

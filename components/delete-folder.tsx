@@ -9,6 +9,7 @@ type DeleteFolderProps = {
 export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
   const {
     userFolders: { folders, removeFolder },
+    session: { setStatus },
   } = useStore();
   const [folderId, setFolderId] = useState<string>("");
 
@@ -19,9 +20,18 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
+    setStatus("loading", "Deleting folder...");
+
     if (!folderId) return;
 
-    removeFolder(folderId);
+    const remove = await removeFolder(folderId);
+
+    if (remove) {
+      setStatus("ok", "Removed folder");
+    } else {
+      setStatus("error", "Something went wrong");
+    }
+
     closeModal();
   };
 
