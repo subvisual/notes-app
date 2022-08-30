@@ -20,7 +20,7 @@ type UseStore = {
   };
   userNotes: {
     allNotes: NoteType[];
-    getAllNotes: (userSignature: string, signedKey: string) => void;
+    getAllNotes: (userSignature: string, signedKey: string) => Promise<boolean>;
     addNote: (
       params: {
         name: string;
@@ -39,7 +39,7 @@ type UseStore = {
   };
   userFolders: {
     folders: FolderType[];
-    getFolders: (userSignature: string, signedKey: string) => void;
+    getFolders: (userSignature: string, signedKey: string) => Promise<boolean>;
     addFolder: (
       params: { name: string; user: string },
       signedKey: string,
@@ -89,7 +89,9 @@ export const useStore = create<UseStore>()((set) => ({
     getAllNotes: async (userSignature: string, signedKey: string) => {
       const res = await axios.get(`notes?userSig=${userSignature}`);
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) {
+        return false;
+      }
 
       const decryptedNotes = res.data.notes.map((note: NoteType) => ({
         ...note,
@@ -105,6 +107,8 @@ export const useStore = create<UseStore>()((set) => ({
         ...state,
         userNotes: { ...state.userNotes, allNotes: decryptedNotes },
       }));
+
+      return true;
     },
     addNote: async (
       params: {
@@ -196,7 +200,9 @@ export const useStore = create<UseStore>()((set) => ({
     getFolders: async (userSignature: string, signedKey: string) => {
       const res = await axios.get(`folders?userSig=${userSignature}`);
 
-      if (res.status !== 200) return;
+      if (res.status !== 200) {
+        return false;
+      }
 
       const decryptedFolders = res.data.folders.map((folder: FolderType) => ({
         ...folder,
@@ -209,6 +215,8 @@ export const useStore = create<UseStore>()((set) => ({
         ...state,
         userFolders: { ...state.userFolders, folders: decryptedFolders },
       }));
+
+      return true;
     },
     addFolder: async (
       params: { name: string; user: string },
