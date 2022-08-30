@@ -15,13 +15,17 @@ export default function NoteTags({
   const tagsArray = splitTags(tags);
 
   return (
-    <div>
+    <div className="flex grow items-center overflow-x-scroll">
       {editMode ? (
-        <input value={tags} onChange={handleChangeTags} />
+        <input
+          className="w-full rounded-sm bg-light-1 px-2 text-dark-1 shadow-input-light outline-none dark:bg-dark-1 dark:text-light-1"
+          value={tags}
+          onChange={handleChangeTags}
+        />
       ) : (
-        <ul className="flex">
+        <ul className="flex whitespace-nowrap">
           {tagsArray.map((tag) => (
-            <li key={tag} className="before:content-['#']">
+            <li key={tag} className="ml-[0.4rem] before:content-['#']">
               {tag}
             </li>
           ))}

@@ -2,6 +2,10 @@ import { useState, useEffect, ChangeEvent } from "react";
 import NoteTags from "./note-tags";
 import { useStore } from "../lib/store";
 import slugify from "../lib/utils/slugify";
+import EditSVG from "../assets/edit.svg";
+import TagsSVG from "../assets/tags.svg";
+import TrashSVG from "../assets/trash.svg";
+import SaveSVG from "../assets/save.svg";
 
 export default function NoteEditor() {
   const {
@@ -64,19 +68,19 @@ export default function NoteEditor() {
     setOpenNote(null);
   };
 
-  const nameChangeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setName(ev.target.value);
 
     if (!updateName) setUpdateName(true);
   };
 
-  const contentChangeHandler = (ev: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleContentChange = (ev: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(ev.target.value);
 
     if (!updateContent) setUpdateContent(true);
   };
 
-  const tagChangeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
+  const handleTagChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setTags(ev.target.value);
 
     if (!updateTags) setUpdateTags(true);
@@ -96,46 +100,66 @@ export default function NoteEditor() {
   };
 
   return (
-    <div className="w-4/5">
+    <div className="w-full">
       {openNote && (
-        <div className="flex flex-col">
-          <div className="bg-slate-300 flex justify-between">
+        <div className="flex h-full flex-col">
+          <div className="grid h-[4.5rem] grid-cols-[1fr,_auto] gap-3 bg-light-2 px-3 dark:bg-dark-3">
             <NoteTags
               tags={tags}
               editMode={editTags}
-              handleChangeTags={tagChangeHandler}
+              handleChangeTags={handleTagChange}
             />
-            <button
-              className={`${editTags && "bg-blue-400"} p-2`}
-              type="button"
-              onClick={toggleEditTags}
-            >
-              tags
-            </button>
-            <button
-              type="button"
-              className={`${editNote && "bg-blue-400"} p-2`}
-              onClick={toggleEditNote}
-            >
-              edit
-            </button>
-            <button type="button" onClick={deleteNote}>
-              delete
-            </button>
-            <button type="button" className="p-2" onClick={saveNote}>
-              save
-            </button>
+            <div className="flex gap-1">
+              <button
+                type="button"
+                title="Edit tags"
+                className={`${
+                  editTags &&
+                  "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
+                } p-2`}
+                onClick={toggleEditTags}
+              >
+                <TagsSVG className="h-6 w-6 fill-current" />
+              </button>
+              <button
+                type="button"
+                title="Edit note"
+                className={`${
+                  editNote &&
+                  "bg-green text-light-1 dark:bg-pistachio dark:text-dark-1"
+                } p-2`}
+                onClick={toggleEditNote}
+              >
+                <EditSVG className="h-6 w-6 stroke-current stroke-[1.5]" />
+              </button>
+              <button
+                type="button"
+                title="Delete note"
+                className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
+                onClick={deleteNote}
+              >
+                <TrashSVG className="h-7 w-7 stroke-current stroke-2" />
+              </button>
+              <button
+                type="button"
+                title="Save changes"
+                className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
+                onClick={saveNote}
+              >
+                <SaveSVG className="h-7 w-7 fill-current" />
+              </button>
+            </div>
           </div>
-          <div className="flex flex-col">
+          <div className="bg:light-1 h-full w-full pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input
-              className="border"
-              onChange={nameChangeHandler}
+              className="mx-auto block w-[calc(100%-10rem)] border-b-thin bg-transparent text-3xl outline-none"
+              onChange={handleNameChange}
               readOnly={!editNote}
               value={name}
             />
             <textarea
-              className="border"
-              onChange={contentChangeHandler}
+              className="mt-7 block h-full w-full resize-none overflow-y-scroll bg-transparent px-20 pb-10 outline-none"
+              onChange={handleContentChange}
               readOnly={!editNote}
               value={content}
             />

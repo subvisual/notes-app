@@ -2,13 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Studio Feixen Sans";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../public/fonts/StudioFeixenSans-Regular.otf");
+}
+
 body {
   height: 100vh;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  box-sizing: border-box;
+  font-family: Studio Feixen Sans, -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
 }
 
 #__next {
@@ -21,13 +30,13 @@ a {
 }
 
 * {
-  box-sizing: border-box;
-  padding: 5px 10px;
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
 }
 
-button {
-  padding: 5px;
-  margin: 10px;
-  border: 1px solid black;
-  background-color: unset;
+.ReactModal__Overlay {
+  background-color: rgba(29, 30, 36, 0.9) !important;
+  backdrop-filter: blur(3px);
+  z-index: 20;
 }

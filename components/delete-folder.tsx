@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, FormEvent } from "react";
+import FormButton from "./form-button";
 import { useStore } from "../lib/store";
 
 type DeleteFolderProps = {
@@ -26,10 +27,10 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
 
   return (
     <>
-      <h2 className="text-center">Delete folder</h2>
+      <h2 className="self-center text-center text-lg">Delete folder</h2>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col text-center items-center"
+        className="grid h-full grid-rows-[2fr,_1fr] items-start text-center"
       >
         <label htmlFor="delete-folder-name">
           Folder:
@@ -38,6 +39,7 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
             required
             value={folderId}
             onChange={handleFolderChange}
+            className="ml-4 w-1/2 rounded-md border-thin border-inherit bg-light-1 px-2  py-1 text-dark-1"
           >
             <option disabled value="">
               Choose a folder
@@ -49,13 +51,13 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
             ))}
           </select>
         </label>
-        <div className="flex justify-around">
-          <button type="button" className="p-2" onClick={closeModal}>
+        <div className="flex justify-center gap-9">
+          <FormButton variant="secondary" type="button" onClick={closeModal}>
             cancel
-          </button>
-          <button type="submit" className="p-2">
+          </FormButton>
+          <FormButton variant="primary" type="submit">
             delete
-          </button>
+          </FormButton>
         </div>
       </form>
     </>

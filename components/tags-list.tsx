@@ -5,10 +5,10 @@ export default function TagsList() {
   const { filteredTags } = useFilteredStore();
 
   return (
-    <div>
+    <ul>
       {filteredTags.map((tag) => (
         <Tag key={tag} tag={tag} />
       ))}
-    </div>
+    </ul>
   );
 }

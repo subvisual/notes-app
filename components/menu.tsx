@@ -1,20 +1,11 @@
-import { useState, useEffect, MouseEvent } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import Modal from "react-modal";
-import FoldersList from "./folders-list";
+import { useState, useEffect } from "react";
 import { useStore } from "../lib/store";
-import TagsList from "./tags-list";
-import AddNote from "./add-note";
-import AddFolder from "./add-folder";
-import DeleteFolder from "./delete-folder";
 import SearchBar from "./search-bar";
-
-enum ModalActions {
-  ADD_NOTE = "addNote",
-  ADD_FOLDER = "addFolder",
-  DELETE_FOLDER = "deleteFolder",
-  NONE = "",
-}
+import Logo from "./logo";
+import ThemeButton from "./theme-button";
+import MenuTabs from "./menu-tabs";
+import MenuActions from "./menu-actions";
+import Modal, { ModalActions } from "./modal";
 
 export default function Menu() {
   const {
@@ -29,66 +20,22 @@ export default function Menu() {
     setTags();
   }, [allNotes, setTags]);
 
-  const changeModalAction = (ev: MouseEvent) =>
-    setModalAction((ev.target as HTMLButtonElement).value as ModalActions);
-
   const closeModal = () => setModalAction(ModalActions.NONE);
 
   return (
-    <div className="bg-slate-300 h-full flex flex-col justify-between items-center w-1/5">
-      <SearchBar />
-      <Tabs className="grow">
-        <TabList className="flex">
-          <Tab>Folders</Tab>
-          <Tab>Tags</Tab>
-        </TabList>
-
-        <TabPanel className="p-0">
-          <FoldersList />
-        </TabPanel>
-        <TabPanel className="p-0">
-          <TagsList />
-        </TabPanel>
-      </Tabs>
-      <button
-        type="button"
-        className="p-2"
-        onClick={changeModalAction}
-        value={ModalActions.ADD_NOTE}
-      >
-        ADD NOTE
-      </button>
-      <button
-        type="button"
-        className="p-2"
-        onClick={changeModalAction}
-        value={ModalActions.ADD_FOLDER}
-      >
-        ADD FOLDER
-      </button>
-      <button
-        type="button"
-        className="p-2"
-        onClick={changeModalAction}
-        value={ModalActions.DELETE_FOLDER}
-      >
-        DELETE FOLDER
-      </button>
-      <Modal
-        isOpen={!!modalAction}
-        className="bg-slate-200 flex w-6/12 h-3/6 mx-auto mt-32 flex-col"
-        ariaHideApp={false}
-      >
-        {modalAction === ModalActions.ADD_NOTE && (
-          <AddNote closeModal={closeModal} />
-        )}
-        {modalAction === ModalActions.ADD_FOLDER && (
-          <AddFolder closeModal={closeModal} />
-        )}
-        {modalAction === ModalActions.DELETE_FOLDER && (
-          <DeleteFolder closeModal={closeModal} />
-        )}
-      </Modal>
-    </div>
+    <>
+      <div className="text-md z-10 grid h-screen w-full grid-rows-[7.8rem,_1fr,_5.8rem] bg-light-2 shadow-[0_0px_15px_rgba(0,0,0,.3)] dark:bg-dark-3">
+        <div className="h-full w-full p-5">
+          <div className="flex items-center">
+            <Logo width="120" length="45" />
+            <ThemeButton />
+          </div>
+          <SearchBar />
+        </div>
+        <MenuTabs />
+        <MenuActions setModalAction={setModalAction} />
+      </div>
+      <Modal type={modalAction} closeModal={closeModal} />
+    </>
   );
 }
