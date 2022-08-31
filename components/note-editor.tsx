@@ -117,10 +117,10 @@ export default function NoteEditor() {
   };
 
   return (
-    <div className="w-full">
+    <div className="h-screen w-full">
       {openNote && (
-        <div className="flex h-full flex-col">
-          <div className="grid h-[4.5rem] grid-cols-[1fr,_auto] gap-3 bg-light-2 px-3 dark:bg-dark-3">
+        <div className="grid h-full grid-rows-[4.5rem,_1fr] flex-col">
+          <div className="grid h-full grid-cols-[1fr,_auto] gap-3 bg-light-2 px-3 dark:bg-dark-3">
             <NoteTags
               tags={tags}
               editMode={editTags}
@@ -167,15 +167,15 @@ export default function NoteEditor() {
               </button>
             </div>
           </div>
-          <div className="bg:light-1 h-full w-full pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
+          <div className="bg:light-1 flex h-full w-full flex-col px-20 pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input
-              className="mx-auto block w-[calc(100%-10rem)] border-b-thin bg-transparent text-3xl outline-none"
+              className="mx-auto block w-full border-b-thin bg-transparent text-3xl outline-none"
               onChange={handleNameChange}
               readOnly={!editNote}
               value={name}
             />
             <textarea
-              className="mt-7 block h-full w-full resize-none overflow-y-scroll bg-transparent px-20 pb-10 outline-none"
+              className="mt-7 block h-full w-full resize-none overflow-y-scroll bg-transparent outline-none"
               onChange={handleContentChange}
               readOnly={!editNote}
               value={content}
