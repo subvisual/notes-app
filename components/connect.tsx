@@ -44,7 +44,7 @@ export default function Connect() {
 
         setAuthState("Please sign the message...");
         const userSignature = await signer.signMessage(
-          `Hi, please sign this message: ${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
+          `Please sign this string. This signature will be your unique identifier. ${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
         );
         let key = "";
 
@@ -64,7 +64,9 @@ export default function Connect() {
           }
         }
 
-        const sigKey = await signer.signMessage(key);
+        const sigKey = await signer.signMessage(
+          `This signature will be your encryption key. ${key}`,
+        );
 
         if (!sigKey || !userSignature) {
           throw new Error("Missing user information");
