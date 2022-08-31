@@ -12,7 +12,7 @@ export default function Connect() {
     user: { setUserSig, setSignedKey, userSig, signedKey },
     userNotes: { getAllNotes },
     userFolders: { getFolders },
-    session: { isConnected, setIsConnected },
+    session: { isConnected, setIsConnected, setStatus },
   } = useStore();
 
   useEffect(() => {
@@ -26,13 +26,26 @@ export default function Connect() {
     setHasMetamask(true);
   }, []);
 
+  async function getInitialData(sig: string, key: string) {
+    setStatus("loading", "Getting data...");
+
+    const notes = await getAllNotes(sig, key);
+    const folders = await getFolders(sig, key);
+
+    setIsConnected(true);
+
+    if (notes && folders) {
+      setStatus("ok", "All set!");
+    } else {
+      setStatus("error", "Something went wrong");
+    }
+  }
+
   const connect = async () => {
     if (!window.ethereum) return;
 
     if (userSig && signedKey) {
-      getAllNotes(userSig, signedKey);
-      getFolders(userSig, signedKey);
-      setIsConnected(true);
+      getInitialData(userSig, signedKey);
     } else {
       try {
         setIsConnecting(true);
@@ -76,9 +89,7 @@ export default function Connect() {
         setSignedKey(sigKey);
         setIsConnecting(false);
         setAuthState("Connected");
-        setIsConnected(true);
-        getAllNotes(userSignature, sigKey);
-        getFolders(userSignature, sigKey);
+        getInitialData(userSignature, sigKey);
       } catch (err: any) {
         if (err.code === 4001) {
           setAuthState("");

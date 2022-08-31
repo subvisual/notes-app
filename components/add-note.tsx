@@ -12,13 +12,15 @@ export default function AddNote({ closeModal }: AddNoteProps) {
     user: { userSig, signedKey },
     userFolders: { folders },
     userNotes: { addNote },
-    session: { setOpenNote },
+    session: { setOpenNote, setStatus },
   } = useStore();
   const defaultName = "New Note";
   const [noteName, setNoteName] = useState<string>(defaultName);
   const [folderId, setFolderId] = useState<string>("");
 
   const createNote = async () => {
+    setStatus("loading", "Creating note...");
+
     const slug = slugify(noteName);
     const newNote = await addNote(
       {
@@ -30,7 +32,12 @@ export default function AddNote({ closeModal }: AddNoteProps) {
       signedKey,
     );
 
-    if (newNote) setOpenNote(newNote);
+    if (newNote) {
+      setStatus("ok", "Created note");
+      setOpenNote(newNote);
+    } else {
+      setStatus("error", "Something went wrong");
+    }
   };
 
   const handleNameChange = (ev: ChangeEvent<HTMLInputElement>) => {

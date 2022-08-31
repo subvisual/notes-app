@@ -5,6 +5,7 @@ import Menu from "../components/menu";
 import NoteEditor from "../components/note-editor";
 import Logo from "../components/logo";
 import { useStore } from "../lib/store";
+import StatusBar from "../components/status-bar";
 
 export default function Home() {
   const {
@@ -40,6 +41,7 @@ export default function Home() {
             </div>
           </div>
         )}
+        <StatusBar />
       </main>
     </>
   );

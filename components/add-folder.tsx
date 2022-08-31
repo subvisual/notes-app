@@ -10,6 +10,7 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
   const {
     user: { userSig, signedKey },
     userFolders: { addFolder },
+    session: { setStatus },
   } = useStore();
   const defaultName = "New Folder";
   const [folderName, setFolderName] = useState<string>(defaultName);
@@ -20,7 +21,20 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    addFolder({ name: folderName, user: userSig }, signedKey);
+
+    setStatus("loading", "Creating folder...");
+
+    const folder = await addFolder(
+      { name: folderName, user: userSig },
+      signedKey,
+    );
+
+    if (folder) {
+      setStatus("ok", "Created folder");
+    } else {
+      setStatus("error", "Something went wrong");
+    }
+
     closeModal();
   };
 

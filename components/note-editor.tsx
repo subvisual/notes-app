@@ -11,7 +11,7 @@ export default function NoteEditor() {
   const {
     user: { signedKey },
     userNotes: { updateNote, removeNote },
-    session: { openNote, setOpenNote },
+    session: { openNote, setOpenNote, setStatus },
   } = useStore();
   const [editNote, setEditNote] = useState<boolean>(false);
   const [editTags, setEditTags] = useState<boolean>(false);
@@ -48,13 +48,21 @@ export default function NoteEditor() {
   const saveNote = async () => {
     if (!openNote) return;
 
+    setStatus("loading", "Saving...");
+
     const updatedNote = {
       ...(updateName && { name, slug: slugify(name) }),
       ...(updateContent && { content }),
       ...(updateTags && { tags }),
     };
 
-    updateNote(openNote.id, updatedNote, signedKey);
+    const update = await updateNote(openNote.id, updatedNote, signedKey);
+
+    if (update) {
+      setStatus("ok", "Saved note");
+    } else {
+      setStatus("error", "Something went wrong");
+    }
 
     setUpdateName(false);
     setUpdateContent(false);
@@ -64,7 +72,16 @@ export default function NoteEditor() {
   const deleteNote = async () => {
     if (!openNote) return;
 
-    removeNote(openNote.id);
+    setStatus("loading", "Removing...");
+
+    const remove = await removeNote(openNote.id);
+
+    if (remove) {
+      setStatus("ok", "Removed note");
+    } else {
+      setStatus("error", "Something went wrong");
+    }
+
     setOpenNote(null);
   };
 
