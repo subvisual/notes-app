@@ -4,7 +4,7 @@ import TagsList from "./tags-list";
 
 export default function MenuTabs() {
   return (
-    <Tabs className="h-full w-full self-start overflow-y-hidden">
+    <Tabs className="flex h-full w-full flex-col self-start overflow-y-hidden">
       <TabList className="grid w-full grid-cols-[1fr_1fr] border-b-thin border-dark-4 text-center dark:border-light-4">
         <Tab
           className="flex h-[3.2rem] w-full cursor-pointer items-center justify-center"
