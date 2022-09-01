@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import NoteTags from "./note-tags";
 import NoteBody from "./note-body";
 import { useStore } from "../lib/store";
@@ -59,7 +59,9 @@ export default function NoteEditor() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const saveNote = async () => {
+  const saveNote = async (ev: FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+
     if (!openNote) return;
 
     setStatus("loading", "Saving...");
@@ -135,7 +137,10 @@ export default function NoteEditor() {
   return (
     <div className="h-screen w-full">
       {openNote && (
-        <div className="grid h-full grid-rows-[4.5rem,_1fr] flex-col">
+        <form
+          onSubmit={saveNote}
+          className="grid h-full grid-rows-[4.5rem,_1fr] flex-col"
+        >
           <div className="grid h-full grid-cols-[1fr,_auto] gap-3 bg-light-2 px-3 dark:bg-dark-3">
             <NoteTags
               tags={tags}
@@ -174,10 +179,9 @@ export default function NoteEditor() {
                 <TrashSVG className="h-7 w-7 stroke-current stroke-2" />
               </button>
               <button
-                type="button"
+                type="submit"
                 title="Save changes"
                 className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
-                onClick={saveNote}
               >
                 <SaveSVG className="h-7 w-7 fill-current" />
               </button>
@@ -185,6 +189,7 @@ export default function NoteEditor() {
           </div>
           <div className="bg:light-1 grid h-full w-full grid-rows-[4rem,_1fr] gap-[1.9rem] overflow-y-hidden pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input
+              required
               className="mx-20 block border-b-thin bg-transparent text-3xl outline-none"
               onChange={handleNameChange}
               readOnly={!editNote}
@@ -196,7 +201,7 @@ export default function NoteEditor() {
               content={content}
             />
           </div>
-        </div>
+        </form>
       )}
     </div>
   );
