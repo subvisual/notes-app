@@ -46,6 +46,19 @@ export default function NoteEditor() {
     if (openNote.tags) setTags(openNote.tags);
   }, [openNote]);
 
+  useEffect(() => {
+    const handleKeyDown = async (ev: KeyboardEvent) => {
+      if ((ev.ctrlKey || ev.metaKey) && ev.key === "e") {
+        ev.preventDefault();
+        toggleEditNote();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const saveNote = async () => {
     if (!openNote) return;
 
@@ -104,7 +117,9 @@ export default function NoteEditor() {
     if (!updateTags) setUpdateTags(true);
   };
 
-  const toggleEditNote = () => setEditNote((prevEditNote) => !prevEditNote);
+  function toggleEditNote() {
+    setEditNote((prevEditNote) => !prevEditNote);
+  }
 
   const toggleEditTags = async () => {
     if (!openNote) return;
