@@ -1,5 +1,6 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import NoteTags from "./note-tags";
+import NoteBody from "./note-body";
 import { useStore } from "../lib/store";
 import slugify from "../lib/utils/slugify";
 import EditSVG from "../assets/edit.svg";
@@ -167,18 +168,17 @@ export default function NoteEditor() {
               </button>
             </div>
           </div>
-          <div className="bg:light-1 flex h-full w-full flex-col px-20 pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
+          <div className="bg:light-1 grid h-full w-full grid-rows-[4rem,_1fr] gap-[1.9rem] overflow-y-hidden pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input
-              className="mx-auto block w-full border-b-thin bg-transparent text-3xl outline-none"
+              className="mx-20 block border-b-thin bg-transparent text-3xl outline-none"
               onChange={handleNameChange}
               readOnly={!editNote}
               value={name}
             />
-            <textarea
-              className="mt-7 block h-full w-full resize-none overflow-y-scroll bg-transparent outline-none"
-              onChange={handleContentChange}
-              readOnly={!editNote}
-              value={content}
+            <NoteBody
+              editNote={editNote}
+              handleContentChange={handleContentChange}
+              content={content}
             />
           </div>
         </div>
