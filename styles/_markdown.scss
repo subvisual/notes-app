@@ -1,5 +1,7 @@
 @mixin heading {
-  padding: 20px 0 10px;
+  &:not(:first-child) {
+    padding: 20px 0 10px;
+  }
 }
 
 #markdown {

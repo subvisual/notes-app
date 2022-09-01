@@ -59,7 +59,7 @@ export default function NoteBody({
   };
 
   return (
-    <div className="mt-7 h-full overflow-y-hidden px-20">
+    <div className="h-full overflow-y-hidden px-20">
       {editNote ? (
         <textarea
           className="block h-full w-full resize-none bg-transparent outline-none"
