@@ -1,0 +1,100 @@
+@mixin heading {
+  padding: 20px 0 10px;
+}
+
+#markdown {
+  * {
+    max-width: 100%;
+  }
+
+  font-weight: normal;
+
+  h1 {
+    font-size: 1.5rem;
+    @include heading;
+  }
+  h2 {
+    font-size: 1.375rem;
+    @include heading;
+  }
+  h3 {
+    font-size: 1.25rem;
+    @include heading;
+  }
+  h4 {
+    font-size: 1.2rem;
+    @include heading;
+  }
+  h5 {
+    font-size: 1.15rem;
+    @include heading;
+  }
+  h6 {
+    font-size: 1.1rem;
+    @include heading;
+  }
+
+  blockquote {
+    padding-left: 1rem;
+    border-left: 3px solid gray;
+    p {
+      padding-bottom: 0.5rem;
+      line-height: 1;
+    }
+  }
+
+  a {
+    text-decoration: underline 0.5px;
+  }
+
+  p,
+  ol,
+  ul {
+    margin-bottom: 10px;
+  }
+
+  li {
+    &.task-list-item {
+      list-style-type: none;
+    }
+    &::marker {
+      display: inline-block;
+      margin-left: 1rem;
+    }
+    p {
+      display: inline;
+    }
+  }
+
+  ol {
+    list-style: decimal inside none;
+  }
+
+  ul {
+    list-style: disc inside none;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  thead,
+  tr {
+    border-bottom: 0.5px solid currentColor;
+  }
+
+  code {
+    background-color: rgba(137, 137, 137, 0.2);
+    border-radius: 5px;
+    padding: 2px 4px;
+    margin-bottom: 10px;
+  }
+
+  pre > code {
+    display: block;
+  }
+
+  pre > div > code {
+    background-color: transparent;
+  }
+}
