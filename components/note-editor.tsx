@@ -63,6 +63,7 @@ export default function NoteEditor() {
     ev.preventDefault();
 
     if (!openNote) return;
+
     if (!updateName && !updateContent && !updateTags) return;
 
     setStatus("loading", "Saving...");
@@ -122,6 +123,7 @@ export default function NoteEditor() {
 
   function toggleEditNote() {
     if (!editNote) setEditTags(false);
+
     setEditNote((prevEditNote) => !prevEditNote);
   }
 
@@ -134,6 +136,7 @@ export default function NoteEditor() {
     }
 
     if (!editTags) setEditNote(false);
+
     setEditTags((prevEditTags) => !prevEditTags);
   };
 
