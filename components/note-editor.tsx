@@ -63,6 +63,7 @@ export default function NoteEditor() {
     ev.preventDefault();
 
     if (!openNote) return;
+    if (!updateName && !updateContent && !updateTags) return;
 
     setStatus("loading", "Saving...");
 
@@ -120,6 +121,7 @@ export default function NoteEditor() {
   };
 
   function toggleEditNote() {
+    if (!editNote) setEditTags(false);
     setEditNote((prevEditNote) => !prevEditNote);
   }
 
@@ -131,6 +133,7 @@ export default function NoteEditor() {
       setUpdateTags(false);
     }
 
+    if (!editTags) setEditNote(false);
     setEditTags((prevEditTags) => !prevEditTags);
   };
 
@@ -187,10 +190,10 @@ export default function NoteEditor() {
               </button>
             </div>
           </div>
-          <div className="bg:light-1 grid h-full w-full grid-rows-[4rem,_1fr] gap-[1.9rem] overflow-y-hidden pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
+          <div className="bg:light-1 grid h-full w-full grid-rows-[4rem,_1fr] gap-[1.9rem] overflow-y-hidden px-20 pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
             <input
               required
-              className="mx-20 block border-b-thin bg-transparent text-3xl outline-none"
+              className="block w-full border-b-thin bg-transparent text-3xl outline-none"
               onChange={handleNameChange}
               readOnly={!editNote}
               value={name}
