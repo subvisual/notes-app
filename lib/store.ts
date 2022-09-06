@@ -171,9 +171,7 @@ export const useStore = create<UseStore>()((set) => ({
           slug: encryptData(params.slug, signedKey),
         }),
         ...(params.tags && { tags: encryptData(params.tags, signedKey) }),
-        ...(params.content && {
-          content: encryptData(params.content, signedKey),
-        }),
+        content: encryptData(params.content || "", signedKey),
       };
       const res = await axios.put(`notes?id=${id}`, encryptedNote);
 

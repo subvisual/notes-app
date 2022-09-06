@@ -65,6 +65,7 @@ export default function AddNote({ closeModal }: AddNoteProps) {
           <label htmlFor="new-note-name">
             Name:
             <input
+              required
               id="new-note-name"
               value={noteName}
               onChange={handleNameChange}

@@ -48,6 +48,7 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
         <label htmlFor="new-folder-name">
           Folder:
           <input
+            required
             id="new-folder-name"
             value={folderName}
             onChange={handleNameChange}
