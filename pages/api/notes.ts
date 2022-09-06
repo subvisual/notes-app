@@ -43,14 +43,14 @@ const handler = nc<NextApiRequest, NextApiResponse<Data>>({
   })
   .put(async (req, res) => {
     const { id } = req.query;
-    const { name, slug, folder, tags, content } = req.body;
+    const { name, slug, tags, content } = req.body;
     const newNote = {
-      ...(name && { name }),
-      ...(slug && { slug }),
-      ...(folder && { folder }),
-      ...(tags && { tags }),
-      ...(content && { content }),
+      name,
+      slug,
+      tags,
+      content,
     };
+
     const { data } = await updateNote(id as string, newNote);
 
     if (data?.length) {

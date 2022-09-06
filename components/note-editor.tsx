@@ -69,11 +69,11 @@ export default function NoteEditor() {
     setStatus("loading", "Saving...");
 
     const updatedNote = {
-      ...(updateName && { name, slug: slugify(name) }),
-      ...(updateContent && { content }),
-      ...(updateTags && { tags }),
+      name,
+      slug: slugify(name),
+      content,
+      tags,
     };
-
     const update = await updateNote(openNote.id, updatedNote, signedKey);
 
     if (update) {
