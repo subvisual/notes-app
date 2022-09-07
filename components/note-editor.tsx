@@ -146,6 +146,9 @@ export default function NoteEditor() {
 
   const handleShare = async () => {
     if (!openNote) return;
+
+    setStatus("loading", "Generating URL...");
+
     const sharedNoteKey = uuidv4();
     const sharedNote = {
       name: encryptData(openNote.name, sharedNoteKey),
@@ -155,11 +158,16 @@ export default function NoteEditor() {
 
     const res = await axios.post("note", sharedNote);
 
-    if (res.status !== 200) return false;
+    if (res.status !== 200) {
+      setStatus("error", "Something went wrong");
 
-    navigator.clipboard.writeText(
-      `${window.location.protocol}//${window.location.host}/note/${res.data.note.id}?key=${sharedNoteKey}`,
-    );
+      return;
+    }
+
+    const noteURL = `${window.location.protocol}//${window.location.host}/note/${res.data.note.id}?key=${sharedNoteKey}`;
+
+    navigator.clipboard.writeText(noteURL);
+    setStatus("ok", "URL copied");
   };
 
   return (
