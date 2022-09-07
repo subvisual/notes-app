@@ -1,4 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { v4 as uuidv4 } from "uuid";
+import axios from "../lib/axios";
 import NoteTags from "./note-tags";
 import NoteBody from "./note-body";
 import { useStore } from "../lib/store";
@@ -7,6 +9,8 @@ import EditSVG from "../assets/edit.svg";
 import TagsSVG from "../assets/tags.svg";
 import TrashSVG from "../assets/trash.svg";
 import SaveSVG from "../assets/save.svg";
+import ShareSVG from "../assets/share.svg";
+import { encryptData } from "../lib/utils/crypto";
 
 export default function NoteEditor() {
   const {
@@ -140,6 +144,24 @@ export default function NoteEditor() {
     setEditTags((prevEditTags) => !prevEditTags);
   };
 
+  const handleShare = async () => {
+    if (!openNote) return;
+    const sharedNoteKey = uuidv4();
+    const sharedNote = {
+      name: encryptData(openNote.name, sharedNoteKey),
+      content: encryptData(openNote.content, sharedNoteKey),
+      tags: encryptData(openNote.tags, sharedNoteKey),
+    };
+
+    const res = await axios.post("note", sharedNote);
+
+    if (res.status !== 200) return false;
+
+    navigator.clipboard.writeText(
+      `${window.location.protocol}//${window.location.host}/note/${res.data.note.id}?key=${sharedNoteKey}`,
+    );
+  };
+
   return (
     <div className="h-screen w-full">
       {openNote && (
@@ -190,6 +212,14 @@ export default function NoteEditor() {
                 className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
               >
                 <SaveSVG className="h-7 w-7 fill-current" />
+              </button>
+              <button
+                type="button"
+                title="Share note"
+                className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
+                onClick={handleShare}
+              >
+                <ShareSVG className="h-6 w-6 fill-current" />
               </button>
             </div>
           </div>
