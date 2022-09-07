@@ -32,6 +32,9 @@ export async function createUser(signature: string, key: string) {
   return supabase.from("users").insert([{ signature, key }]);
 }
 
+export async function getSharedNoteById(id: string) {
+  return supabase.from("notes").select(`name, tags, content`).eq("id", id);
+}
 export async function getNotesBySig(sig: string) {
   return supabase
     .from("notes")
