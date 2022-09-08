@@ -1,7 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import { NoteType } from "../..";
-import { createNote, deleteNote, getNotesBySig, updateNote } from "./db";
+import {
+  createNote,
+  deleteNote,
+  getNotesBySig,
+  updateNote,
+} from "../../lib/db";
 
 type Data = {
   notes?: NoteType[];

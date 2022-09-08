@@ -6,7 +6,7 @@ import {
   deletePublicNote,
   getPublicNotesBySig,
   updatePublicNote,
-} from "./db";
+} from "../../lib/db";
 
 type Data = {
   publicNotes?: PublicNoteType[];
