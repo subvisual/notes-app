@@ -21,7 +21,7 @@ export default function NoteBody({
           value={content}
         />
       ) : (
-        <div id="markdown" className="h-full overflow-y-hidden">
+        <div className="markdown h-full overflow-y-hidden">
           <Markdown content={content} />
         </div>
       )}

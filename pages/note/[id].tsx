@@ -3,7 +3,7 @@ import Head from "next/head";
 import { NoteType } from "../..";
 import { decryptData } from "../../lib/utils/crypto";
 import splitTags from "../../lib/utils/split-tags";
-import { getSharedNoteById } from "../api/db";
+import { getPublicNoteById } from "../api/db";
 import Markdown from "../../components/markdown";
 
 type NoteProps = {
@@ -19,7 +19,7 @@ export default function Note({ note, encKey }: NoteProps) {
   return (
     <>
       <Head>
-        <title>Notes App - {name}</title>
+        <title>{`Notes App - ${name}`}</title>
       </Head>
 
       <main className="h-full overflow-y-scroll bg-light-1 font-studio font-light text-dark-1 dark:bg-dark-1 dark:text-light-2">
@@ -35,7 +35,7 @@ export default function Note({ note, encKey }: NoteProps) {
               </li>
             ))}
           </ul>
-          <div className="mx-8 mt-8 h-full w-full text-left">
+          <div className="markdown mx-8 mt-8 h-full w-full text-left">
             <Markdown content={content} />
           </div>
         </div>
@@ -46,7 +46,7 @@ export default function Note({ note, encKey }: NoteProps) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id, key } = context.query;
-  const res = await getSharedNoteById(id as string);
+  const res = await getPublicNoteById(id as string);
 
   if (res.status !== 200 || !res.body) {
     return {
