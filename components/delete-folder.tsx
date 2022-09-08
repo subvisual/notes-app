@@ -8,6 +8,7 @@ type DeleteFolderProps = {
 
 export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
   const {
+    userNotes: { allNotes },
     userFolders: { folders, removeFolder },
     session: { setStatus },
   } = useStore();
@@ -20,9 +21,17 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    setStatus("loading", "Deleting folder...");
-
     if (!folderId) return;
+
+    const folderNotEmpty = allNotes.some((note) => note.folder === folderId);
+
+    if (folderNotEmpty) {
+      setStatus("error", "Please empty folder before deleting...");
+
+      return;
+    }
+
+    setStatus("loading", "Deleting folder...");
 
     const remove = await removeFolder(folderId);
 
