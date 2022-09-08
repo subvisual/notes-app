@@ -16,7 +16,12 @@ export default function NoteEditor() {
   const {
     user: { signedKey, userSig },
     userNotes: { updateNote, removeNote },
-    userPublicNotes: { publicNotes, updatePublicNote, addPublicNote },
+    userPublicNotes: {
+      publicNotes,
+      removePublicNote,
+      updatePublicNote,
+      addPublicNote,
+    },
     session: { openNote, setOpenNote, setStatus },
   } = useStore();
   const [editNote, setEditNote] = useState<boolean>(false);
@@ -98,6 +103,16 @@ export default function NoteEditor() {
     setStatus("loading", "Removing...");
 
     const remove = await removeNote(openNote.id);
+
+    if (!remove) setStatus("error", "Something went wrong");
+
+    setStatus("ok", "Removed note");
+
+    const publicNote = publicNotes.find(
+      (note) => note.originalNote === openNote.id,
+    );
+
+    if (publicNote) removePublicNote(publicNote.id);
 
     setOpenNote(null);
   };
