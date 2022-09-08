@@ -208,7 +208,7 @@ export default function NoteEditor() {
           onSubmit={saveNote}
           className="grid h-full grid-rows-[4.5rem,_1fr] flex-col"
         >
-          <div className="grid h-full grid-cols-[1fr,_auto] gap-3 bg-light-2 px-3 dark:bg-dark-3">
+          <div className="grid h-full grid-cols-[1fr,_auto] items-center gap-3 bg-light-2 px-3 dark:bg-dark-3">
             <NoteTags
               tags={tags}
               editMode={editTags}

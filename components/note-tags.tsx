@@ -15,7 +15,7 @@ export default function NoteTags({
   const tagsArray = splitTags(tags);
 
   return (
-    <div className="flex grow items-center overflow-x-scroll">
+    <div className="flex h-2/4 items-center overflow-x-scroll">
       {editMode ? (
         <input
           className="w-full rounded-sm bg-light-1 px-2 text-dark-1 shadow-input-light outline-none dark:bg-dark-1 dark:text-light-1"
