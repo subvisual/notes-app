@@ -88,6 +88,13 @@ export default function NoteEditor() {
 
     if (update) {
       setStatus("ok", "Saved note");
+      setOpenNote({
+        ...openNote,
+        content: updatedNote.content,
+        tags: updatedNote.tags,
+        name: updatedNote.name,
+        slug: updatedNote.slug,
+      });
     } else {
       setStatus("error", "Something went wrong");
     }
