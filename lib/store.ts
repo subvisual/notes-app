@@ -1,6 +1,6 @@
 import create from "zustand";
 import axios from "./axios";
-import { NoteType, FolderType } from "..";
+import { NoteType, FolderType, PublicNoteType } from "..";
 import splitTags from "./utils/split-tags";
 import { encryptData, decryptData } from "./utils/crypto";
 
@@ -36,6 +36,22 @@ type UseStore = {
       params: Record<string, string>,
       signedKey: string,
     ) => Promise<boolean>;
+  };
+  userPublicNotes: {
+    publicNotes: PublicNoteType[];
+    getPublicNotes: (userSignature: string) => Promise<boolean>;
+    addPublicNote: (params: {
+      name: string;
+      content?: string;
+      tags?: string;
+      originalNote: string;
+      user: string;
+    }) => Promise<PublicNoteType | undefined>;
+    removePublicNote: (id: string) => void;
+    updatePublicNote: (
+      id: string,
+      params: Record<string, string>,
+    ) => Promise<PublicNoteType | undefined>;
   };
   userFolders: {
     folders: FolderType[];
@@ -190,6 +206,92 @@ export const useStore = create<UseStore>()((set) => ({
       }));
 
       return true;
+    },
+  },
+
+  userPublicNotes: {
+    publicNotes: [],
+    getPublicNotes: async (userSignature: string) => {
+      const res = await axios.get(`public-notes?userSig=${userSignature}`);
+
+      if (res.status !== 200) {
+        return false;
+      }
+
+      set((state) => ({
+        ...state,
+        userPublicNotes: {
+          ...state.userPublicNotes,
+          publicNotes: res.data.publicNotes,
+        },
+      }));
+
+      return true;
+    },
+    addPublicNote: async (params: {
+      name: string;
+      content?: string;
+      tags?: string;
+      originalNote: string;
+      user: string;
+    }): Promise<PublicNoteType | undefined> => {
+      const res = await axios.post("public-notes", params);
+
+      if (res.status !== 200) {
+        return undefined;
+      }
+
+      set((state) => ({
+        ...state,
+        userPublicNotes: {
+          ...state.userPublicNotes,
+          publicNotes: [
+            ...state.userPublicNotes.publicNotes,
+            res.data.publicNote,
+          ],
+        },
+      }));
+
+      return res.data.publicNote;
+    },
+    removePublicNote: async (id: string) => {
+      const res = await axios.delete(`public-notes?id=${id}`);
+
+      if (res.status !== 200) {
+        return;
+      }
+
+      set((state) => ({
+        ...state,
+        userPublicNotes: {
+          ...state.userPublicNotes,
+          publicNotes: state.userPublicNotes.publicNotes.filter(
+            (note) => note.id !== id,
+          ),
+        },
+      }));
+    },
+    updatePublicNote: async (
+      id: string,
+      params: Record<string, string>,
+    ): Promise<PublicNoteType | undefined> => {
+      const res = await axios.put(`public-notes?id=${id}`, params);
+
+      if (res.status !== 200) {
+        return undefined;
+      }
+
+      set((state) => ({
+        ...state,
+        userPublicNotes: {
+          ...state.userPublicNotes,
+          publicNotes: state.userPublicNotes.publicNotes.map((note) =>
+            note.id === id ? { ...note, ...params } : note,
+          ),
+        },
+      }));
+
+      return res.data.publicNote;
     },
   },
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { v4 as uuidv4 } from "uuid";
 import NoteTags from "./note-tags";
 import NoteBody from "./note-body";
 import { useStore } from "../lib/store";
@@ -7,11 +8,20 @@ import EditSVG from "../assets/edit.svg";
 import TagsSVG from "../assets/tags.svg";
 import TrashSVG from "../assets/trash.svg";
 import SaveSVG from "../assets/save.svg";
+import ShareSVG from "../assets/share.svg";
+import { encryptData } from "../lib/utils/crypto";
+import { PublicNoteType } from "..";
 
 export default function NoteEditor() {
   const {
-    user: { signedKey },
+    user: { signedKey, userSig },
     userNotes: { updateNote, removeNote },
+    userPublicNotes: {
+      publicNotes,
+      removePublicNote,
+      updatePublicNote,
+      addPublicNote,
+    },
     session: { openNote, setOpenNote, setStatus },
   } = useStore();
   const [editNote, setEditNote] = useState<boolean>(false);
@@ -78,6 +88,13 @@ export default function NoteEditor() {
 
     if (update) {
       setStatus("ok", "Saved note");
+      setOpenNote({
+        ...openNote,
+        content: updatedNote.content,
+        tags: updatedNote.tags,
+        name: updatedNote.name,
+        slug: updatedNote.slug,
+      });
     } else {
       setStatus("error", "Something went wrong");
     }
@@ -94,11 +111,15 @@ export default function NoteEditor() {
 
     const remove = await removeNote(openNote.id);
 
-    if (remove) {
-      setStatus("ok", "Removed note");
-    } else {
-      setStatus("error", "Something went wrong");
-    }
+    if (!remove) setStatus("error", "Something went wrong");
+
+    setStatus("ok", "Removed note");
+
+    const publicNote = publicNotes.find(
+      (note) => note.originalNote === openNote.id,
+    );
+
+    if (publicNote) removePublicNote(publicNote.id);
 
     setOpenNote(null);
   };
@@ -138,6 +159,46 @@ export default function NoteEditor() {
     if (!editTags) setEditNote(false);
 
     setEditTags((prevEditTags) => !prevEditTags);
+  };
+
+  const handleShare = async () => {
+    if (!openNote) return;
+
+    setStatus("loading", "Generating URL...");
+
+    const publicKey = uuidv4();
+    const newPublicNote = {
+      name: encryptData(openNote.name, publicKey),
+      content: encryptData(openNote.content, publicKey),
+      tags: encryptData(openNote.tags, publicKey),
+    };
+
+    const publicNote = publicNotes.find(
+      (note) => note.originalNote === openNote.id,
+    );
+
+    let note: PublicNoteType | undefined;
+
+    if (publicNote) {
+      note = await updatePublicNote(publicNote.id, newPublicNote);
+    } else {
+      note = await addPublicNote({
+        ...newPublicNote,
+        originalNote: openNote.id,
+        user: userSig,
+      });
+    }
+
+    if (!note) {
+      setStatus("error", "Something went wrong");
+
+      return;
+    }
+
+    const noteURL = `${window.location.protocol}//${window.location.host}/note/${note.id}?key=${publicKey}`;
+
+    navigator.clipboard.writeText(noteURL);
+    setStatus("ok", "URL copied");
   };
 
   return (
@@ -190,6 +251,14 @@ export default function NoteEditor() {
                 className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
               >
                 <SaveSVG className="h-7 w-7 fill-current" />
+              </button>
+              <button
+                type="button"
+                title="Share note"
+                className="p-2 active:bg-green active:text-light-1 dark:active:bg-pistachio active:dark:text-dark-1"
+                onClick={handleShare}
+              >
+                <ShareSVG className="h-6 w-6 fill-current" />
               </button>
             </div>
           </div>

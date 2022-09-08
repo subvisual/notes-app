@@ -11,6 +11,7 @@ export default function Connect() {
   const {
     user: { setUserSig, setSignedKey, userSig, signedKey },
     userNotes: { getAllNotes },
+    userPublicNotes: { getPublicNotes },
     userFolders: { getFolders },
     session: { isConnected, setIsConnected, setStatus },
   } = useStore();
@@ -31,10 +32,11 @@ export default function Connect() {
 
     const notes = await getAllNotes(sig, key);
     const folders = await getFolders(sig, key);
+    const publicNotes = await getPublicNotes(sig);
 
     setIsConnected(true);
 
-    if (notes && folders) {
+    if (notes && folders && publicNotes) {
       setStatus("ok", "All set!");
     } else {
       setStatus("error", "Something went wrong");
