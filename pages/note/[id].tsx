@@ -3,7 +3,7 @@ import Head from "next/head";
 import { NoteType } from "../..";
 import { decryptData } from "../../lib/utils/crypto";
 import splitTags from "../../lib/utils/split-tags";
-import { getPublicNoteById } from "../api/db";
+import { getPublicNoteById } from "../../lib/db";
 import Markdown from "../../components/markdown";
 
 type NoteProps = {
