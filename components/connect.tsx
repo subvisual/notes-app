@@ -59,7 +59,7 @@ export default function Connect() {
 
         setAuthState("Please sign the message...");
         const userSignature = await signer.signMessage(
-          `Please sign this string. This signature will be your unique identifier. ${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
+          `Please sign this string. This signature will be your unique identifier:\n${process.env.NEXT_PUBLIC_RANDOM_STRING}`,
         );
         let key = "";
 
@@ -80,7 +80,7 @@ export default function Connect() {
         }
 
         const sigKey = await signer.signMessage(
-          `This signature will be your encryption key. ${key}`,
+          `This signature will be your encryption key:\n${key}`,
         );
 
         if (!sigKey || !userSignature) {
