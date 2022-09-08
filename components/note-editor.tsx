@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
-import axios from "../lib/axios";
 import NoteTags from "./note-tags";
 import NoteBody from "./note-body";
 import { useStore } from "../lib/store";
@@ -11,11 +10,13 @@ import TrashSVG from "../assets/trash.svg";
 import SaveSVG from "../assets/save.svg";
 import ShareSVG from "../assets/share.svg";
 import { encryptData } from "../lib/utils/crypto";
+import { PublicNoteType } from "..";
 
 export default function NoteEditor() {
   const {
-    user: { signedKey },
+    user: { signedKey, userSig },
     userNotes: { updateNote, removeNote },
+    userPublicNotes: { publicNotes, updatePublicNote, addPublicNote },
     session: { openNote, setOpenNote, setStatus },
   } = useStore();
   const [editNote, setEditNote] = useState<boolean>(false);
@@ -98,12 +99,6 @@ export default function NoteEditor() {
 
     const remove = await removeNote(openNote.id);
 
-    if (remove) {
-      setStatus("ok", "Removed note");
-    } else {
-      setStatus("error", "Something went wrong");
-    }
-
     setOpenNote(null);
   };
 
@@ -149,22 +144,36 @@ export default function NoteEditor() {
 
     setStatus("loading", "Generating URL...");
 
-    const sharedNoteKey = uuidv4();
-    const sharedNote = {
-      name: encryptData(openNote.name, sharedNoteKey),
-      content: encryptData(openNote.content, sharedNoteKey),
-      tags: encryptData(openNote.tags, sharedNoteKey),
+    const publicKey = uuidv4();
+    const newPublicNote = {
+      name: encryptData(openNote.name, publicKey),
+      content: encryptData(openNote.content, publicKey),
+      tags: encryptData(openNote.tags, publicKey),
     };
 
-    const res = await axios.post("note", sharedNote);
+    const publicNote = publicNotes.find(
+      (note) => note.originalNote === openNote.id,
+    );
 
-    if (res.status !== 200) {
+    let note: PublicNoteType | undefined;
+
+    if (publicNote) {
+      note = await updatePublicNote(publicNote.id, newPublicNote);
+    } else {
+      note = await addPublicNote({
+        ...newPublicNote,
+        originalNote: openNote.id,
+        user: userSig,
+      });
+    }
+
+    if (!note) {
       setStatus("error", "Something went wrong");
 
       return;
     }
 
-    const noteURL = `${window.location.protocol}//${window.location.host}/note/${res.data.note.id}?key=${sharedNoteKey}`;
+    const noteURL = `${window.location.protocol}//${window.location.host}/note/${note.id}?key=${publicKey}`;
 
     navigator.clipboard.writeText(noteURL);
     setStatus("ok", "URL copied");

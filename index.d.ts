@@ -27,3 +27,9 @@ type NoteType = {
   content: string;
   user: string;
 };
+
+type PublicNoteType = {
+  id: string;
+  user: string;
+  originalNote: string;
+};
