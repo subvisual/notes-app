@@ -6,7 +6,7 @@ import {
   deleteFolder,
   getFoldersBySig,
   updateFolder,
-} from "./db";
+} from "../../lib/db";
 
 type Data = {
   folders?: FolderType[];

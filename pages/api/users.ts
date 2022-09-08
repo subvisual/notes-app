@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
 import { UserType } from "../..";
-import { createUser, getUser } from "./db";
+import { createUser, getUser } from "../../lib/db";
 
 type Data = {
   message: string;
