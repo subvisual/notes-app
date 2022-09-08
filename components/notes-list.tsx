@@ -31,7 +31,7 @@ export default function NotesList({ notes }: NotesListProps) {
           >
             <NoteSVG className="h-5 w-5 stroke-current stroke-2" />
 
-            <span className="w-full overflow-x-scroll whitespace-nowrap">
+            <span className="w-full overflow-x-hidden text-ellipsis whitespace-nowrap">
               {note.name}
             </span>
           </button>

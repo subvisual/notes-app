@@ -1,0 +1,22 @@
+::-webkit-scrollbar {
+  width: 5px;
+  height: 3px;
+  position: relative;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: currentColor;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(126, 126, 126, 0.6);
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background-color: rgba(173, 173, 173, 0.6);
+}

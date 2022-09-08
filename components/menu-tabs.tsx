@@ -20,7 +20,7 @@ export default function MenuTabs() {
         </Tab>
       </TabList>
 
-      <div className="h-full w-full self-stretch overflow-y-scroll">
+      <div className="h-full w-full self-stretch overflow-y-auto">
         <TabPanel>
           <FoldersList />
         </TabPanel>

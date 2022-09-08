@@ -42,7 +42,7 @@ export default function Folder({ folder }: FolderProps) {
         onClick={toggleNotes}
       >
         <FolderSVG className="h-5 w-5 stroke-current stroke-[1.5]" />
-        <span className="w-full overflow-x-scroll whitespace-nowrap text-left">
+        <span className="w-full overflow-x-hidden text-ellipsis whitespace-nowrap text-left">
           {folder.name}
         </span>
         <ChevronSVG
