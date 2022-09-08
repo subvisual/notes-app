@@ -29,6 +29,8 @@ export default function StatusBar() {
 
     timeout.current = setTimeout(() => {
       setVisible(false);
+
+      if (status === "error" || status === "ok") setStatus("idle");
     }, DELAY);
 
     return () => clear();
@@ -47,7 +49,7 @@ export default function StatusBar() {
 
   return (
     <div
-      className="zindex-2 absolute right-8 bottom-8 z-50 flex items-center rounded bg-light-3 px-4 py-3 text-dark-2 transition-opacity dark:bg-light-2 dark:text-dark-3"
+      className="absolute right-8 bottom-8 z-50 flex items-center rounded bg-light-3 px-4 py-3 text-dark-2 transition-opacity dark:bg-light-2 dark:text-dark-3"
       style={{ opacity: visible ? 1 : 0 }}
     >
       {StatusIcon[status]}
