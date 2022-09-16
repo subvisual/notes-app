@@ -395,11 +395,14 @@ export const useStore = create<UseStore>()((set) => ({
           (previousTags, currentNote) => {
             if (!currentNote.tags) return [...previousTags];
 
+            const newTags = splitTags(currentNote.tags).filter(
+              (value, index, array) =>
+                index === array.findIndex((item) => item === value),
+            );
+
             return [
               ...previousTags,
-              ...splitTags(currentNote.tags).filter(
-                (tag) => !previousTags.includes(tag),
-              ),
+              ...newTags.filter((tag) => !previousTags.includes(tag)),
             ];
           },
           [] as string[],
