@@ -1,3 +1,3 @@
-const splitTags = (tags: string) => tags.split(/ *[,;\s] */).filter(Boolean);
+const splitTags = (tags: string) => tags.split(/ *[,;] */).filter(Boolean);
 
 export default splitTags;
