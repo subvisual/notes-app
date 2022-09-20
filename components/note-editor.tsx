@@ -9,6 +9,7 @@ import TagsSVG from "../assets/tags.svg";
 import TrashSVG from "../assets/trash.svg";
 import SaveSVG from "../assets/save.svg";
 import ShareSVG from "../assets/share.svg";
+import BackSVG from "../assets/back.svg";
 import { encryptData } from "../lib/utils/crypto";
 import { PublicNoteType } from "..";
 
@@ -201,20 +202,30 @@ export default function NoteEditor() {
     setStatus("ok", "URL copied");
   };
 
+  const closeNote = () => setOpenNote(null);
+
   return (
     <div className="h-screen w-full">
       {openNote && (
         <form
           onSubmit={saveNote}
-          className="grid h-full grid-rows-[4.5rem,_1fr] flex-col"
+          className="grid h-full grid-rows-[auto,_1fr] sm:grid-rows-[4.5rem,_1fr]"
         >
-          <div className="grid h-full grid-cols-[1fr,_auto] items-center gap-3 bg-light-2 px-3 dark:bg-dark-3">
+          <div className="grid h-full grid-cols-[2rem] items-center gap-x-3 bg-light-2 px-3 py-2 dark:bg-dark-3 sm:grid-cols-[1fr,_auto] sm:py-0">
+            <button
+              type="button"
+              title="Back to menu"
+              className="p-2 sm:hidden"
+              onClick={closeNote}
+            >
+              <BackSVG className="h-7 w-7 stroke-dark-1 active:stroke-green dark:stroke-light-1 active:dark:stroke-pistachio" />
+            </button>
             <NoteTags
               tags={tags}
               editMode={editTags}
               handleChangeTags={handleTagChange}
             />
-            <div className="flex gap-1">
+            <div className="flex justify-self-end sm:gap-1">
               <button
                 type="button"
                 title="Edit tags"
@@ -262,7 +273,7 @@ export default function NoteEditor() {
               </button>
             </div>
           </div>
-          <div className="bg:light-1 grid h-full w-full grid-rows-[4rem,_1fr] gap-[1.9rem] overflow-y-hidden px-20 pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1">
+          <div className="grid h-full w-full grid-rows-[4rem,_1fr] gap-[1.9rem] overflow-y-hidden bg-light-1 px-10 pb-4 pt-10 text-dark-3 dark:bg-dark-1 dark:text-light-1 sm:px-20">
             <input
               required
               className="block w-full border-b-thin bg-transparent text-3xl outline-none"
