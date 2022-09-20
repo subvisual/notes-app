@@ -45,7 +45,10 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
         onSubmit={handleSubmit}
         className="grid h-full grid-rows-[2fr,_1fr] items-start text-center"
       >
-        <label htmlFor="new-folder-name">
+        <label
+          htmlFor="new-folder-name"
+          className="flex flex-col items-center gap-2 sm:block"
+        >
           Folder:
           <input
             required
@@ -53,7 +56,7 @@ export default function AddFolder({ closeModal }: AddFolderProps) {
             value={folderName}
             onChange={handleNameChange}
             maxLength={40}
-            className="ml-4 w-1/2 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1  outline-none"
+            className="ml-4 w-4/5 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1 outline-none  sm:w-1/2"
           />
         </label>
         <div className="flex justify-center gap-9">

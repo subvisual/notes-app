@@ -9,7 +9,7 @@ import StatusBar from "../components/status-bar";
 
 export default function Home() {
   const {
-    session: { isConnected },
+    session: { isConnected, openNote },
   } = useStore();
 
   return (
@@ -20,9 +20,13 @@ export default function Home() {
 
       <main className="h-full bg-light-1 font-studio font-light text-dark-1 dark:bg-dark-1 dark:text-light-2">
         {isConnected ? (
-          <div className="grid grid-cols-[20rem,_1fr]">
-            <Menu />
-            <NoteEditor />
+          <div className="sm:grid sm:grid-cols-[max(15rem,_30%),_1fr] lg:grid-cols-[20rem,_1fr]">
+            <div className={`${openNote && "hidden"} sm:block`}>
+              <Menu />
+            </div>
+            <div className={`${!openNote ? "hidden" : ""} sm:block`}>
+              <NoteEditor />
+            </div>
           </div>
         ) : (
           <div className="flex flex-col text-center">

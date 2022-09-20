@@ -51,14 +51,17 @@ export default function DeleteFolder({ closeModal }: DeleteFolderProps) {
         onSubmit={handleSubmit}
         className="grid h-full grid-rows-[2fr,_1fr] items-start text-center"
       >
-        <label htmlFor="delete-folder-name">
+        <label
+          htmlFor="delete-folder-name"
+          className="flex flex-col items-center gap-2 sm:block"
+        >
           Folder:
           <select
             id="delete-folder-name"
             required
             value={folderId}
             onChange={handleFolderChange}
-            className="ml-4 w-1/2 rounded-md border-thin border-inherit bg-light-1 px-2  py-1 text-dark-1"
+            className="ml-4 w-4/5 rounded-md border-thin border-inherit bg-light-1 px-2 py-1  text-dark-1 sm:w-1/2"
           >
             <option disabled value="">
               Choose a folder
