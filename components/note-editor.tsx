@@ -211,11 +211,11 @@ export default function NoteEditor() {
           onSubmit={saveNote}
           className="grid h-full grid-rows-[auto,_1fr] sm:grid-rows-[4.5rem,_1fr]"
         >
-          <div className="grid h-full grid-cols-[2rem] items-center gap-x-3 bg-light-2 px-3 py-2 dark:bg-dark-3 sm:grid-cols-[1fr,_auto] sm:py-0">
+          <div className="grid h-full grid-cols-[1fr,_auto] items-center gap-x-3 bg-light-2 px-3 py-2 dark:bg-dark-3 sm:grid-cols-[1fr,_auto] sm:py-0">
             <button
               type="button"
               title="Back to menu"
-              className="p-2 sm:hidden"
+              className="py-2 px-1 sm:hidden"
               onClick={closeNote}
             >
               <BackSVG className="h-7 w-7 stroke-dark-1 active:stroke-green dark:stroke-light-1 active:dark:stroke-pistachio" />
