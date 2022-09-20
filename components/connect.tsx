@@ -108,7 +108,7 @@ export default function Connect() {
     <div className="mx-auto mt-24">
       {hasMetamask && !isConnected && (
         <button
-          className="mb-9 rounded-3xl border-none bg-pistachio px-12 py-6 text-xl leading-none drop-shadow-connect-light dark:bg-dark-3 dark:drop-shadow-connect-dark"
+          className="mx-3 mb-9 rounded-3xl border-none bg-pistachio px-5 py-5 leading-6 drop-shadow-connect-light dark:bg-dark-3 dark:drop-shadow-connect-dark sm:py-6 sm:px-12 sm:text-xl"
           type="button"
           onClick={connect}
           disabled={isConnecting}

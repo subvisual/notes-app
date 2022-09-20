@@ -62,7 +62,10 @@ export default function AddNote({ closeModal }: AddNoteProps) {
         className="grid h-full w-full grid-rows-[2fr,_1fr] items-start text-center"
       >
         <div className="flex w-full flex-col gap-6">
-          <label htmlFor="new-note-name">
+          <label
+            htmlFor="new-note-name"
+            className="flex flex-col items-center gap-2 sm:block"
+          >
             Name:
             <input
               required
@@ -70,17 +73,20 @@ export default function AddNote({ closeModal }: AddNoteProps) {
               value={noteName}
               onChange={handleNameChange}
               maxLength={40}
-              className="ml-4 w-1/2 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1  outline-none"
+              className="ml-4 w-4/5 rounded-md border-thin border-inherit bg-light-1 px-2 py-1 text-dark-1 outline-none  sm:w-1/2"
             />
           </label>
-          <label htmlFor="new-note-folder">
+          <label
+            htmlFor="new-note-folder"
+            className="flex flex-col items-center gap-2 sm:block"
+          >
             Folder:
             <select
               id="new-note-folder"
               required
               value={folderId}
               onChange={handleFolderChange}
-              className="ml-4 w-1/2 text-ellipsis rounded-md border-thin border-inherit bg-light-1 px-2  py-1 text-dark-1"
+              className="ml-4 w-4/5 text-ellipsis rounded-md border-thin border-inherit bg-light-1 px-2 py-1  text-dark-1 sm:w-1/2"
             >
               <option disabled value="">
                 Choose a folder

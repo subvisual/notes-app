@@ -10,13 +10,13 @@ export default function About() {
         <title>About - Notes App</title>
       </Head>
 
-      <main className="flex h-full w-full flex-col items-center justify-start gap-[10%] bg-light-1 text-dark-1 dark:bg-dark-1 dark:text-light-3">
+      <main className="flex h-full w-full flex-col items-center justify-between gap-8 bg-light-1 text-dark-1 dark:bg-dark-1 dark:text-light-3">
         <Link href="/">
           <a title="Go back" className="m-6 self-start">
             <BackSVG className="h-12 w-12 fill-transparent stroke-current hover:stroke-green hover:dark:stroke-pistachio" />
           </a>
         </Link>
-        <p className="mx-auto w-3/5 text-center leading-7">
+        <p className="mx-auto w-4/5 text-center leading-7 sm:w-3/5">
           This is a simple note taking app that makes the most of crypto wallets
           to anonymously store notes.
           <br />
@@ -27,7 +27,7 @@ export default function About() {
           The notes are encrypted and stored on Supabase.
         </p>
         <a
-          className="mt-20 flex items-center gap-2 rounded-lg border border-current px-4 py-3 text-dark-1 hover:bg-green hover:text-light-1 dark:border-[.5px] dark:text-light-1 hover:dark:bg-pistachio hover:dark:text-dark-1"
+          className="mb-40 flex items-center gap-2 rounded-lg border border-current px-4 py-3 text-dark-1 hover:bg-green hover:text-light-1 dark:border-[.5px] dark:text-light-1 hover:dark:bg-pistachio hover:dark:text-dark-1"
           title="GitHub"
           target="_blank"
           rel="noopener noreferrer"
