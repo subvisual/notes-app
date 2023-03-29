@@ -1,9 +1,3 @@
-declare global {
-  interface Window {
-    ethereum?: any;
-  }
-}
-
 type UserType = {
   id: string;
   signature: string;

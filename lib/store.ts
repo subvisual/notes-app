@@ -1,6 +1,5 @@
 import create from "zustand";
 import axios from "./axios";
-import { NoteType, FolderType, PublicNoteType } from "..";
 import splitTags from "./utils/split-tags";
 import { encryptData, decryptData } from "./utils/crypto";
 
