@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import NotesList from "./notes-list";
 import { useStore } from "../lib/store";
 import useFilteredStore from "../lib/hooks/useFilteredStore";
-import { FolderType } from "..";
 import ChevronSVG from "../assets/chevron.svg";
 import FolderSVG from "../assets/folder.svg";
 

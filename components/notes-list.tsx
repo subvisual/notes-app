@@ -1,5 +1,4 @@
 import { useStore } from "../lib/store";
-import { NoteType } from "..";
 import NoteSVG from "../assets/note.svg";
 
 type NotesListProps = {

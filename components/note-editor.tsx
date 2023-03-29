@@ -11,7 +11,6 @@ import SaveSVG from "../assets/save.svg";
 import ShareSVG from "../assets/share.svg";
 import BackSVG from "../assets/back.svg";
 import { encryptData } from "../lib/utils/crypto";
-import { PublicNoteType } from "..";
 
 export default function NoteEditor() {
   const {
